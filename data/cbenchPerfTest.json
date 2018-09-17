@@ -109,3 +109,5 @@
 {"Test": CBENCHJSON, "Message": {"Time": 2018-09-12 20:47:33,103, "Measures": [{switches: 5, macs: 100, avg_num_flows: 145.41}]}}
 {"Test": CBENCHJSON, "Message": {"Time": 2018-09-12 20:47:45,814, "Measures": [{switches: 5, macs: 100, avg_num_flows: 142.67}]}}
 {"Test": CBENCHJSON, "Message": {"Time": 2018-09-12 20:47:58,301, "Measures": [{switches: 5, macs: 100, avg_num_flows: 141.31}]}}
+{"Test": CBENCHJSON, "Message": {"Time": 2018-09-17 16:10:48,526, "Measures": [{switches: 5, macs: 100, avg_num_flows: 4259.04}]}}
+{"Test": CBENCHJSON, "Message": {"Time": 2018-09-17 16:11:00,891, "Measures": [{switches: 5, macs: 100, avg_num_flows: 2364.27}]}}
