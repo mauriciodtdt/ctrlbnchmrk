@@ -8,7 +8,9 @@ import matplotlib.patches as mpatches
 from datetime import datetime
 import time
 
-csvFile = "./tshark.log"
+DATA_PATH='../data/'
+
+csvFile = DATA_PATH +'TSHARK.csv'
 FMT='%H:%M:%S.%f'
 
 data = pd.read_csv(csvFile,";")
