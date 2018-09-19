@@ -11,6 +11,6 @@ Architectural design and project proposal: It covers the architecture of the ben
 How to: It covers practical information to run scalability and performance test using the sdn ctrlbnchmrk tool.
 Results and conclusions.
 
-Alvaro Mauricio Diaz
-MSc in Internetworking
+Alvaro Mauricio Diaz \
+MSc in Internetworking \
 UTS - Sydney
