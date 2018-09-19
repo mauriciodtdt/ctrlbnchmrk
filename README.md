@@ -4,7 +4,7 @@ This project presents an extensive study on performance and scalability of diffe
 
 The wiki is divided into four sections: 
 
-Background: It covers the relevant and existing literature review on OpenFlow and the Software-Defined-Networks paradigm. \
+Background: It covers the relevant and existing information on OpenFlow and Software-Defined-Networks. \
 State of Art: It covers up to date information about features and current studies of the selected SDN Controllers. \
 Performance Tests: Includes tests proposed by the IETF to benchmark SDN Controllers and its design. \
 Architectural design and project proposal: It covers the architecture of the benchmarking tool. \
