@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
-DATA_PATH='../data/'
+DATA_PATH='/opt/ctrlbnchmrk/data/'
 
 ###########################################################
 #Functions to log results and errors in csv and json format

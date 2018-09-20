@@ -2,15 +2,19 @@
 # Contains configuration for the testing environment, cbench, mininet
 # and wireshark.
 
+CONF = {
+   'CONTROLLER': "SDNCONTROLLER", # Currently only support ODL
+   'CONTROLLER_IP': '10.0.1.10', # Change this to remote IP if running on two systems
+   'CONTROLLER_PORT': '6633' # Default port for OpenDaylight
+}
+
+
 CBENCH_CONFIG = {
    'NUM_SWITCHES': '5', # Default number of switches for CBench to simulate
    'NUM_MACS': '100', # Default number of MACs for CBench to use
    'TESTS_PER_SWITCH': '2', # Default (11) number of CBench tests to do per CBench run
    'MS_PER_TEST': '1000', # Default milliseconds to run each CBench test
    'CBENCH_WARMUP': '1', # Default number of warmup cycles to run CBench
-   'CONTROLLER': 'ryu', # Currently only support ODL
-   'CONTROLLER_IP': '172.17.0.3', # Change this to remote IP if running on two systems
-   'CONTROLLER_PORT': '6633', # Default port for OpenDaylight
    'TEST_LOOP': 2 #Times that CBench will run
 }
 

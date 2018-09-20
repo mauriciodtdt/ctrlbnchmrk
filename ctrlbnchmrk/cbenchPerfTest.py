@@ -4,12 +4,12 @@ import re
 import json
 import sys
 import lib.capture_log as caplog
-sys.path.append('../etc/')
+sys.path.append('/opt/ctrlbnchmrk/etc/')
 import config
 
 #Import CBENCH variables from configuration file /etc/config.py
-CONTROLLER_IP=config.CBENCH_CONFIG['CONTROLLER_IP']
-CONTROLLER_PORT=config.CBENCH_CONFIG['CONTROLLER_PORT']
+CONTROLLER_IP=config.CONF['CONTROLLER_IP']
+CONTROLLER_PORT=config.CONF['CONTROLLER_PORT']
 MS_PER_TEST=config.CBENCH_CONFIG['MS_PER_TEST']
 TESTS_PER_SWITCH=config.CBENCH_CONFIG['TESTS_PER_SWITCH']
 NUM_SWITCHES=config.CBENCH_CONFIG['NUM_SWITCHES']

@@ -1,0 +1,70 @@
+version: '2'
+
+services:
+  ctrl_odl:
+    image: mauriciodtdt/odl:helium2
+    privileged: true
+    container_name: odl
+    hostname: ctrl-node
+    tty: true
+    command: bash -c "/bin/bash"
+    #command: bash -c "ryu run ryu.app.simple_switch --observe-links"
+    volumes:
+      - shareVolume:/opt/  
+    networks:
+      ctrlbnchmrk_net:
+         ipv4_address: 10.0.1.10
+
+  ctrl_ryu:
+    image: osrg/ryu
+    privileged: true
+    container_name: ryu
+    hostname: ctrl-node
+    tty: true
+    #command: bash -c "/bin/bash"
+    command: bash -c "ryu run ryu.app.simple_switch --observe-links"
+    volumes:
+      - shareVolume:/opt/  
+    networks:
+      ctrlbnchmrk_net:
+         ipv4_address: 10.0.1.10
+
+  cbench:
+    image: mauriciodtdt/cbench
+    privileged: true
+    container_name: cbench
+    hostname: cbench-node
+    stdin_open: true
+    tty: true
+    command: bash -c "/bin/bash"
+    volumes:
+      - shareVolume:/opt/  
+    networks:
+      ctrlbnchmrk_net:
+         ipv4_address: 10.0.1.30
+
+  mininet:
+    image: mauriciodtdt/mininet
+    privileged: true
+    container_name: mininet
+    hostname: mininet-node
+    stdin_open: true
+    tty: true
+    command: bash -c "/bin/bash"
+    volumes:
+      - shareVolume:/opt/  
+    networks:
+      ctrlbnchmrk_net:
+         ipv4_address: 10.0.1.31
+
+volumes:
+  shareVolume:
+
+networks:
+  ctrlbnchmrk_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 10.0.1.0/24
+        gateway: 10.0.1.1

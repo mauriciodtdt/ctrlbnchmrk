@@ -4,7 +4,7 @@
 #defined as the interval starting with the first discovery message from the 
 #controller(s) at its Southbound interface, ending with all features of the 
 #static topology determined.
-
+import os
 import multiprocessing as mp
 import subprocess
 import logging
@@ -14,8 +14,11 @@ import json
 import sys
 import lib.capture_log as caplog
 import lib.docker_stats as ds
-sys.path.append('../etc/')
+import lib.mininet as mn
+sys.path.append('/opt/ctrlbnchmrk//etc/')
 import config
+
+CONTROLLER = os.environ.get("CONTROLLER", None)
 
 VINTERFACE=config.NET_TOPO_TIME['VINTERFACE']
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
@@ -56,7 +59,7 @@ def tshark_disect(q):
 
 def  docker_container_stats(q):
    while True:
-      (cpu_container,mem_container) = ds.get_cpuram()
+      (cpu_container,mem_container) = ds.get_cpuram(CONTROLLER)
       results_csv = '%f;%u' \
        % (cpu_container,mem_container)
       docker_csv.debug(results_csv)
@@ -70,6 +73,8 @@ def main():
 
    docker_process.daemon = True
 
+   if mn.deploy():
+      mn.start()
 
 
    processes = [docker_process,tshark_process]

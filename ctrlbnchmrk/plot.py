@@ -8,7 +8,7 @@ import matplotlib.patches as mpatches
 from datetime import datetime
 import time
 
-DATA_PATH='../data/'
+DATA_PATH='/opt/ctrlbnchmrk/data/'
 
 csvFileTshark = DATA_PATH +'TSHARK.csv'
 csvFileDocker = DATA_PATH +'DOCKER.csv'
