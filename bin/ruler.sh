@@ -27,7 +27,7 @@ case $1 in
    echo "Controller: $CONTROLLER"
    case $3 in
    "1")
-      ./NetworkTopologyTime.py $DOCKER_NETWORK
+      ./network_topology_discovery.py $DOCKER_NETWORK
       ;;
    "2")
       docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbenchPerfTest.py -l   
