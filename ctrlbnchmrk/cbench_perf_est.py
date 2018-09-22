@@ -25,15 +25,26 @@ my_logger_csv = caplog.get_logger("CBENCH",'csv')
 ##########################################################
 
 i=0
-
-cmdcbench = 'cbench -c %s -p %s -m %s -l %s -s %s -M %s -w %s -t' \
- % (CONTROLLER_IP, 
-    CONTROLLER_PORT, 
-    MS_PER_TEST, 
-    TESTS_PER_SWITCH, 
-    NUM_SWITCHES, 
-    NUM_MACS, 
-    CBENCH_WARMUP)
+if sys.argv[1] == "-t":
+   #cbench throughput mode -t
+    cmdcbench = 'cbench -c %s -p %s -m %s -l %s -s %s -M %s -w %s -t' \
+    % (CONTROLLER_IP, 
+       CONTROLLER_PORT, 
+       MS_PER_TEST, 
+       TESTS_PER_SWITCH, 
+       NUM_SWITCHES, 
+       NUM_MACS, 
+       CBENCH_WARMUP)
+else:
+   #cbench latency mode
+    cmdcbench = 'cbench -c %s -p %s -m %s -l %s -s %s -M %s -w %s' \
+    % (CONTROLLER_IP, 
+       CONTROLLER_PORT, 
+       MS_PER_TEST, 
+       TESTS_PER_SWITCH, 
+       NUM_SWITCHES, 
+       NUM_MACS, 
+       CBENCH_WARMUP)
 
 while i < TEST_LOOP:
    cbench=subprocess.Popen(cmdcbench, stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)

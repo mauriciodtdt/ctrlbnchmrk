@@ -19,7 +19,6 @@ CBENCH_CONFIG = {
 }
 
 NET_TOPO_TIME = {
-   'VINTERFACE': 'docker0',
    'OF_PORT': 6633,
    'OFPV': 'openflow_1_0.type',
    'OFPT_HELLO': 0,
@@ -29,9 +28,9 @@ NET_TOPO_TIME = {
    'OFPT_PKOUT': 13,
    'OFPT_FREMOVED': 11,
    'OFPT_PSTATUS': 12,
-   'SCAN_TIME': 360
+   'SCAN_TIME': 30
 }
 
 MININET_CONFIG = {
-   'SWITCH_NUM': 500
+   'SWITCH_NUM': 50
 }

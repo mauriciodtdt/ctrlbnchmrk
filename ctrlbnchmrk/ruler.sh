@@ -4,14 +4,17 @@
 #         -T Run Performance Test 
 #         -k Kill Docker Containers
 #Performance Tests Options:
-#1. cbenchPerformance Test Throughput
-#2. Network Topology Discovery Time
-#3.
-#4.
-#5.
+#1. Network Topology Discovery Time
+#2. Assinchronous Message Processing Time - Cbench Latency
+#3. Assigchonous Message Processing Rate - Cbench Throughput
+#4. Reactive Path Provisioning Time
+#5. Network Topology Change Detection Time
+#6. Network Discovery Size
+#7. Network Re-Provisioning Time
 
 export CONTROLLER=$2
-
+(ifconfig | grep br-) | awk 'BEGIN {FS=" "}{print $1}' > docker_interface
+DOCKER_NETWORK=$(<docker_interface)
 
 case $1 in
 -D)
@@ -24,9 +27,24 @@ case $1 in
    echo "Controller: $CONTROLLER"
    case $3 in
    "1")
-      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbenchPerfTest.py
+      ./NetworkTopologyTime.py $DOCKER_NETWORK
       ;;
    "2")
+      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbenchPerfTest.py -l   
+      ;;
+   "3")
+      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbenchPerfTest.py -t
+      ;;
+   "4")
+      ./NetworkTopologyTime.py
+      ;;
+   "5")
+      ./NetworkTopologyTime.py
+      ;;
+   "6")
+      ./NetworkTopologyTime.py
+      ;;
+   "7")
       ./NetworkTopologyTime.py
       ;;
     esac
