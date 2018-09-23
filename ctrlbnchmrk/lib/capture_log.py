@@ -38,7 +38,7 @@ def get_file_handler(logger_name, file_type):
 def get_logger(logger_name,file_type):
    logger = logging.getLogger(logger_name)
    logger.setLevel(logging.DEBUG) # better to have too much log than not enough
-   logger.addHandler(get_console_handler(file_type))
+   #logger.addHandler(get_console_handler(file_type))
    logger.addHandler(get_file_handler(logger_name, file_type))
    logger.propagate = False # with this conf, it's rarely necessary to propagate the error
    return logger

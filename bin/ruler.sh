@@ -5,16 +5,20 @@
 #         -k Kill Docker Containers
 #Performance Tests Options:
 #1. Network Topology Discovery Time
-#2. Assinchronous Message Processing Time - Cbench Latency
-#3. Assigchonous Message Processing Rate - Cbench Throughput
+#2. Asyinchronous Message Processing Time - Cbench Latency
+#3. Asyinchronous Message Processing Rate - Cbench Throughput
 #4. Reactive Path Provisioning Time
 #5. Network Topology Change Detection Time
 #6. Network Discovery Size
 #7. Network Re-Provisioning Time
 
+#####################################################
+#Setting env variables CBHOME, CONTROLLER, VINTERFACE
+export CBMHOME=/opt/ctrlbnchmrk
 export CONTROLLER=$2
-(ifconfig | grep br-) | awk 'BEGIN {FS=" "}{print $1}' > docker_interface
-DOCKER_NETWORK=$(<docker_interface)
+(ifconfig | grep br-) | awk 'BEGIN {FS=" "}{print $1}' > $CBMHOME/etc/docker_interface
+export VINTERFACE=$(<$CBMHOME/etc/docker_interface)
+#####################################################
 
 case $1 in
 -D)
@@ -27,13 +31,13 @@ case $1 in
    echo "Controller: $CONTROLLER"
    case $3 in
    "1")
-      ./network_topology_discovery.py $DOCKER_NETWORK
+      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery.py 
       ;;
    "2")
-      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbenchPerfTest.py -l   
+      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -l   
       ;;
    "3")
-      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbenchPerfTest.py -t
+      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -t
       ;;
    "4")
       ./NetworkTopologyTime.py
@@ -50,7 +54,7 @@ case $1 in
     esac
     ;;
 -k)
-   docker-compose -f ../docker/docker-compose.yml down
+   docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml down
    ;;
 -r)
    echo "do something here"
