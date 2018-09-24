@@ -42,9 +42,7 @@ def tshark_disect(q):
    #cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -Y "%s" -a duration:%u' % \
 #   cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -a duration:%u' % \
 #    (VINTERFACE, OF_PORT, SCAN_TIME)
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V \
-    | egrep 'Arrival Time|Source Port|ID|In port|OFPT_FEATURES_REPLY|PACKET_(IN|OUT)|dpid|Port component|Reason'" \
-    % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|Datapath|In port|OFPT_FEATURES_REPLY|PACKET_(IN|OUT)|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    link_number=0
    #output = check_output(cmd, stderr=STDOUT, timeout=seconds)
@@ -72,11 +70,12 @@ def tshark_disect(q):
          timestamp = temp_timestamp
          tcp_port = temp_tcp_port
       elif "In port" in line and PIN_flag == True:
+         #print "Match In Port"
          sw_port_in = line.split()[2]
-      elif "Reason: Action explicitly output to controller (1)" in line:
+      elif re.match(r' *Reason.*(1)', line):
          begin_flag = True
-      elif "dpid" in line and begin_flag == True:
-         sw_linked = line.split(":")[2].strip()
+      elif "Chassis Subtype" in line and begin_flag == True:
+         sw_linked = line.split(" ")[7].strip()
       elif "Port Subtype" in line and begin_flag == True:
          port_linked = line.split(":")[1].strip()
          link_number += 1
@@ -120,8 +119,10 @@ def mininet_master(q):
    print container
    ### exec_run has to be tty=True and privileged
 #   print container.exec_run("/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py",tty=True, privileged=True)
-   print container.exec_run("mn --controller=remote,ip=10.0.1.10 --topo=linear,50", tty=True, privileged=True)
-   
+   docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=linear,50 --mac --switch=ovsk,protocols=OpenFlow10"
+   print ("%s" % docker_command)
+   container.exec_run(docker_command, tty=True, privileged=True) 
+
 def main():
 
    q = mp.Queue()
