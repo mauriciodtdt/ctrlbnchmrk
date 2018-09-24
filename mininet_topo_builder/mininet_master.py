@@ -8,28 +8,29 @@ from mininet.node import RemoteController, OVSSwitch
 from topologies import datacenter
 import time
 
+dpid_count=0
+
 def run_datacenter():
     "Bootstrap a Mininet network using the Minimal Topology"
  
     # Create an instance of our topology
-    topo = datacenter.DatacenterBasicTopo()
- 
+    topo = datacenter.DatacenterBasicTopo(dpid_count)
     # Create a network based on the topology using OVS and controlled by
     # a remote controller.
     net = Mininet(
         topo=topo,
-        controller=lambda name: RemoteController( name, ip='10.0.1.10' ),
+        controller=lambda name: RemoteController( name, ip='127.0.0.1' ),
         switch=OVSSwitch,
         autoSetMacs=True )
 
-    print "Topology Deployed: Connect Controller?"
+    #print "Topology Deployed: Connect Controller?"
     
     #CLI( net )
 
     # Actually start the network
     net.start()
  
-    print "Controller Connected"
+    # print "Controller Connected"
 
     # Drop the user in to a CLI so user can run commands.
     CLI( net )

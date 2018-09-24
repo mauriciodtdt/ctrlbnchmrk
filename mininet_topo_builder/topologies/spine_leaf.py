@@ -18,11 +18,10 @@ from mininet.util import irange
 class DatacenterBasicTopo( Topo ):
     "Datacenter topology with 4 hosts per rack, 4 racks, and a root switch"
  
-    def __init__(self, dpid_count):
-        self.dpid_count = dpid_count
-        super(DatacenterBasicTopo,self).__init__()        
-        print self.dpid_count
-
+#    def __init__(self, dpid_count):
+#        self.dpid_count = dpid_count + 1
+#        print self.dpid_count
+    
     def build( self ):
         self.racks = []
         rootSwitch = self.addSwitch( 's1')
@@ -46,6 +45,6 @@ class DatacenterBasicTopo( Topo ):
         return [switch]
  
 # Allows the file to be imported using `mn --custom <filename> --topo dcbasic`
-#topos = {
-#    'dcbasic': DatacenterBasicTopo
-#}
+topos = {
+    'dcbasic': DatacenterBasicTopo
+}
