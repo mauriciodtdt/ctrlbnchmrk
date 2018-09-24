@@ -9,6 +9,7 @@ import multiprocessing as mp
 import subprocess
 import logging
 import time
+import csv
 import re
 import docker
 import json
@@ -45,7 +46,7 @@ def tshark_disect(q):
     | egrep 'Arrival Time|Source Port|ID|In port|OFPT_FEATURES_REPLY|PACKET_(IN|OUT)|dpid|Port component|Reason'" \
     % (VINTERFACE, OF_PORT)
    print cmdtshark
-   #packet_result=0
+   link_number=0
    #output = check_output(cmd, stderr=STDOUT, timeout=seconds)
    tshark=subprocess.Popen(cmdtshark, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
    #tshark=subprocess.check_output(cmdtshark)
@@ -78,20 +79,31 @@ def tshark_disect(q):
          sw_linked = line.split(":")[2].strip()
       elif "Port Subtype" in line and begin_flag == True:
          port_linked = line.split(":")[1].strip()
+         link_number += 1
  #        print (tcp_port)
          sw_link_left = sw_array[tcp_port][0]
-         link_info = "%s-%s<-->%s-%s" % (sw_link_left, sw_port_in,sw_linked,port_linked)
+         link_info = "%u;%s-%s<-->%s-%s" % (link_number,sw_link_left, sw_port_in,sw_linked,port_linked)
          my_logger_csv.debug(link_info)
-         link_array[link_info] = timestamp
+         if not link_info in link_array:
+            link_array[link_info] = timestamp
       elif "OFPT_PACKET_OUT" in line:
          begin_flag = False
 
       if len(link_array) == ((SWITCH_NUM*2)-2):
          print ("Links: %u" % len(link_array))
          print ("Switches %u" % len(sw_array))
-#         print (json.dumps(link_array,indent=1))
-#         print (json.dumps(sw_array,indent=1))
-#         print "inside the if"
+         
+
+         with open ("/opt/ctrlbnchmrk/data/switches.txt", mode='w') as sw_file:
+            for item in sw_array:
+               sw_file.write("%s;%s\n" % (item,sw_array[item]))
+
+         with open ("/opt/ctrlbnchmrk/data/link.txt", mode='w') as link_file:
+            for item in link_array:
+               link_file.write("%s;%s\n" % (link_array[item],item))
+
+         #print (json.dumps(link_array,indent=1))
+         #print (json.dumps(sw_array,indent=1))
          q.put("TSHARK_DONE")
          break
 
@@ -106,7 +118,8 @@ def mininet_master(q):
    client = docker.from_env()
    container = client.containers.get("mininet")
    print container
-   #print container.exec_run("/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py",tty=False, privileged=True)
+   ### exec_run has to be tty=True and privileged
+#   print container.exec_run("/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py",tty=True, privileged=True)
    print container.exec_run("mn --controller=remote,ip=10.0.1.10 --topo=linear,50", tty=True, privileged=True)
    
 def main():
@@ -118,6 +131,8 @@ def main():
    
    docker_process.daemon = True
    mininet_process.daemon = True
+   tshark_process.daemon = True
+   
    processes = [docker_process,tshark_process,mininet_process]
 
    for p in processes:
@@ -128,14 +143,12 @@ def main():
       msg = q.get()
       if msg == "TSHARK_DONE":
          print "TSHARK_DONE"
-         tshark_process.terminate()
+         for p in processes:
+            p.terminate()
          time.sleep(0.1)
          if not tshark_process.is_alive():
             tshark_process.join(timeout=1.0)
             q.close()
             break
-   
-   for p in processes:
-      p.stop()
 
 main()
