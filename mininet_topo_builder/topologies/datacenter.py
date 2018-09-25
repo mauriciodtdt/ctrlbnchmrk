@@ -1,6 +1,5 @@
 """ 
 A simple datacenter topology script for Mininet.
- 
     [ s1 ]================================.
       ,---'       |           |           |
     [ s1r1 ]=.  [ s1r2 ]=.  [ s1r3 ]=.  [ s1r4 ]=.
@@ -18,8 +17,10 @@ from mininet.util import irange
 class DatacenterBasicTopo( Topo ):
     "Datacenter topology with 4 hosts per rack, 4 racks, and a root switch"
  
-    def __init__(self, dpid_count):
+    def __init__(self, dpid_count, rack_num, host_num):
         self.dpid_count = dpid_count
+        self.rack_num = rack_num
+        self.host_num = host_num
         super(DatacenterBasicTopo,self).__init__()        
 
     def build( self ):
@@ -27,21 +28,21 @@ class DatacenterBasicTopo( Topo ):
         self.dpid_count += 1
         dpid = (self.dpid_count * 16) 
         rootSwitch = self.addSwitch( 's%s' % self.dpid_count, dpid = '%x' % self.dpid_count)
-        for rack_num in irange( 1, 4 ):
-            rack = self.buildRack( rack_num )
+        for i in irange( 1, self.rack_num ):
+            rack = self.buildRack( i )
             self.racks.append( rack )
             for switch in rack:
                 self.addLink( rootSwitch, switch )
  
-    def buildRack( self, rack_num ):
+    def buildRack( self, i ):
         "Build a rack of hosts with a top-of-rack switch"
  
         self.dpid_count += 1
         dpid = (self.dpid_count * 16) 
-        switch = self.addSwitch( 's%sr%s' % (self.dpid_count,rack_num), dpid='%x' % self.dpid_count )
+        switch = self.addSwitch( 's%sr%s' % (self.dpid_count,i), dpid='%x' % self.dpid_count )
  
-        for host_num in irange( 1, 4 ):
-            host = self.addHost( 's%sh%sr%s' % ( self.dpid_count, host_num, rack_num ) )
+        for j in irange( 1, self.host_num ):
+            host = self.addHost( 's%sh%sr%s' % ( self.dpid_count, j, i ) )
             self.addLink( switch, host )
  
         # Return list of top-of-rack switches for this rack
