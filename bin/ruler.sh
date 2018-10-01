@@ -56,6 +56,9 @@ case $1 in
 -c)
    docker exec -it --privileged mininet mn -c
    ;;
+-t)
+   docker exec -it --privileged mininet mn --controller=remote,ip=10.0.1.10 --topo=linear,3
+   ;;
 -k)
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml down
    ;;
