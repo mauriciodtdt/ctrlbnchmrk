@@ -21,12 +21,10 @@ import config
 
 CBMHOME=os.environ.get("CBMHOME",None)
 CONTROLLER = os.environ.get("CONTROLLER", None)
-#CONTROLLER = "ryu"
 VINTERFACE = os.environ.get("VINTERFACE", None)
-
+TOPOLOGY = sys.argv[1]
 
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
-OFPT_FILTER=config.NET_TOPO_TIME['OFPV'] + ' == ' + str(config.NET_TOPO_TIME['OFPT_FREPLY'])
 SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
 SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
 print SWITCH_NUM
@@ -42,7 +40,7 @@ def tshark_disect(q):
    #cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -Y "%s" -a duration:%u' % \
 #   cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -a duration:%u' % \
 #    (VINTERFACE, OF_PORT, SCAN_TIME)
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|Datapath|In port|OFPT_FEATURES_REPLY|PACKET_(IN|OUT)|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|Datapath|In port|OFPT_FEATURES_REPLY|PACKET_IN|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    link_number=0
    #output = check_output(cmd, stderr=STDOUT, timeout=seconds)
@@ -75,29 +73,41 @@ def tshark_disect(q):
       elif re.match(r' *Reason.*(1)', line):
          begin_flag = True
       elif "Chassis Subtype" in line and begin_flag == True:
-         sw_linked = line.split(" ")[7].strip()
+         if CONTROLLER =="ryu":
+            sw_linked = line.split(":")[2].strip()
+         elif CONTROLLER == "pox":
+            sw_linked = line.split(":")[2].strip()
+         elif CONTROLLER == "odl":
+            sw_linked = line.split("Id:")[1].strip()
+#         print sw_linked
       elif "Port Subtype" in line and begin_flag == True:
          port_linked = line.split(":")[1].strip()
          link_number += 1
- #        print (tcp_port)
+#         print (port_linked)
          sw_link_left = sw_array[tcp_port][0]
          link_info = "%u;%s-%s<-->%s-%s" % (link_number,sw_link_left, sw_port_in,sw_linked,port_linked)
          my_logger_csv.debug(link_info)
          if not link_info in link_array:
             link_array[link_info] = timestamp
-      elif "OFPT_PACKET_OUT" in line:
-         begin_flag = False
-
-      if len(link_array) == ((SWITCH_NUM*2)-2):
+      #elif "OFPT_PACKET_OUT" in line:
+      #   begin_flag = False
+      
+      if TOPOLOGY == "linear":
+         expected_num_links = (SWITCH_NUM*2)-2
+      elif TOPOLOGY == "datacenter":
+         expected_num_links = (SWITCH_NUM*2)
+      if len(link_array) == expected_num_links:
          print ("Links: %u" % len(link_array))
          print ("Switches %u" % len(sw_array))
          
 
-         with open ("/opt/ctrlbnchmrk/data/switches.txt", mode='w') as sw_file:
+         with open ("/opt/ctrlbnchmrk/data/%s_switches.csv" % CONTROLLER, mode='w') as sw_file:
+            sw_file.write("tcpport;dpid\n")
             for item in sw_array:
                sw_file.write("%s;%s\n" % (item,sw_array[item]))
 
-         with open ("/opt/ctrlbnchmrk/data/link.txt", mode='w') as link_file:
+         with open ("/opt/ctrlbnchmrk/data/%s_links.csv" % CONTROLLER, mode='w') as link_file:
+            link_file.write("stamptime;link_number;link\n")
             for item in link_array:
                link_file.write("%s;%s\n" % (link_array[item],item))
 
@@ -119,8 +129,13 @@ def mininet_master(q):
    print container
    ### exec_run has to be tty=True and privileged
 #   print container.exec_run("/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py",tty=True, privileged=True)
-   docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=linear,50 --mac --switch=ovsk,protocols=OpenFlow10"
+   if TOPOLOGY == "linear":
+      docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=linear,50 --mac --switch=ovsk,protocols=OpenFlow10"
+   elif TOPOLOGY == "datacenter":
+      docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py"
+ 
    print ("%s" % docker_command)
+   ### exec_run has to be tty=True and privileged
    container.exec_run(docker_command, tty=True, privileged=True) 
 
 def main():

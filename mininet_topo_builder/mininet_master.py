@@ -18,7 +18,7 @@ def run_datacenter():
     # Create an instance of our topology
     multiple_topos = []
     #Topology with  5 racks and 10 hosts
-    topo = datacenter.DatacenterBasicTopo(dpid_count,5,10)
+    topo = datacenter.DatacenterBasicTopo(dpid_count,20,1)
     #Topology with 10 racks and 20 hosts
     topo2 = datacenter.DatacenterBasicTopo(topo.dpid_count,10,20)
     multiple_topos = [topo,topo2]
@@ -28,13 +28,13 @@ def run_datacenter():
     # a remote controller.
     net = Mininet(
         topo=topo,
-        controller=lambda name: RemoteController( name, ip='127.0.0.1' ),
+        controller=lambda name: RemoteController( name, ip='10.0.1.10' ),
         switch=OVSSwitch,
         autoSetMacs=True )
 
     net2 = Mininet(
         topo=topo2,
-        controller=lambda name: RemoteController( name, ip='127.0.0.1' ),
+        controller=lambda name: RemoteController( name, ip='10.0.1.10' ),
         switch=OVSSwitch,
         autoSetMacs=True )
 
@@ -45,7 +45,7 @@ def run_datacenter():
     # Actually start the network
     net.start()
     time.sleep(60)    
-    net2.start()
+#    net2.start()
  
     # print "Controller Connected"
     #CLI ( net )
@@ -54,8 +54,8 @@ def run_datacenter():
     #while True:
 #    After the user exits the CLI, shutdown the network.
     
-    net.stop()
-    net2.stop()
+  #  net.stop()
+ #   net2.stop()
  
 if __name__ == '__main__':
     # This runs if this file is executed directly

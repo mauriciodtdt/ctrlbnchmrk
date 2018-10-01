@@ -1,5 +1,5 @@
 #!/bin/bash
-#Usage ./ruler <option><sdncontroller>[PerfTest] <Perf Test Number>
+#Usage ./ruler <option> <sdncontroller> [PerfTest] [Topology]
 #Options: -D Deploy docker-compose cbench and mininet
 #         -T Run Performance Test 
 #         -k Kill Docker Containers
@@ -31,7 +31,7 @@ case $1 in
    echo "Controller: $CONTROLLER"
    case $3 in
    "1")
-      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery.py 
+      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery.py $4
       ;;
    "2")
       docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -l   
@@ -53,6 +53,9 @@ case $1 in
       ;;
     esac
     ;;
+-c)
+   docker exec -it --privileged mininet mn -c
+   ;;
 -k)
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml down
    ;;

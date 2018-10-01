@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import subprocess
 import logging
 import re
@@ -46,7 +47,10 @@ else:
        NUM_MACS, 
        CBENCH_WARMUP)
 
+print cmdcbench
+print "switches;macs;avgFlowsSec"
 while i < TEST_LOOP:
+   print "Loop: %u" % i
    cbench=subprocess.Popen(cmdcbench, stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
    (output, err) = cbench.communicate()
    cbenchResults = output[output.index('RESULT'):]
@@ -55,6 +59,7 @@ while i < TEST_LOOP:
    macs = NUM_MACS
    avg_num_flows = cbenchResults.split()[7].split('/')[2]
    results_csv = '%s;%s;%s' % (switches,macs,avg_num_flows)
+   print results_csv
 #   results_json = '{switches: %s, macs: %s, avg_num_flows: %s}' % (switches,macs,avg_num_flows)
    my_logger_csv.debug(results_csv)
 #   my_logger_json.debug(results_json)

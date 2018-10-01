@@ -16,6 +16,21 @@ services:
       ctrlbnchmrk_net:         
         ipv4_address: 10.0.1.10
 
+  ctrl_onos:
+    image: mauriciodtdt/onos
+    privileged: true
+    container_name: onos
+    hostname: ctrl-node
+    ports:
+      - "8181:8181"
+    tty: true
+    command: bash -c "/bin/bash"
+    volumes:
+      - shareVolume:/opt/  
+    networks:
+      ctrlbnchmrk_net:         
+        ipv4_address: 10.0.1.10
+
   ctrl_ryu:
     image: osrg/ryu
     privileged: true
@@ -24,13 +39,26 @@ services:
     ports:
       - "8080:8080"
     tty: true
-    #command: bash -c "/bin/bash"
-    command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py --observe-links"
-    #command: bash -c "ryu run ryu.app.simple_switch --observe-links"
+    command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch.py --observe-links"
     volumes:
       - shareVolume:/opt/  
     networks:
       ctrlbnchmrk_net:
+         ipv4_address: 10.0.1.10
+
+  ctrl_pox:
+    image: mauriciodtdt/pox
+    privileged: true
+    container_name: pox
+    hostname: ctrl-node
+    #ports:
+    #  - "8181:8181"
+    tty: true
+    command: bash -c "~/pox/pox.py forwarding.l2_learning openflow.discovery"
+    volumes:
+      - shareVolume:/opt/  
+    networks:
+      ctrlbnchmrk_net:         
          ipv4_address: 10.0.1.10
 
   cbench:
