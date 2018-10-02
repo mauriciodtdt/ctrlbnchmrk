@@ -21,17 +21,19 @@ export VINTERFACE=$(<$CBMHOME/etc/docker_interface)
 #####################################################
 
 case $1 in
+#Deploy controller and services (mininet and cbench)
 -D)
    echo "Deploying the environment"
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml up --no-start #&>/dev/null &
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml start mininet cbench
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml start ctrl_$2
    ;;
+#Performance Tests (1 to 7) check wiki
 -T)
    echo "Controller: $CONTROLLER"
    case $3 in
    "1")
-      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery.py $4
+      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery_13.py $4
       ;;
    "2")
       docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -l   
@@ -53,12 +55,15 @@ case $1 in
       ;;
     esac
     ;;
+#Clean mininet container
 -c)
    docker exec -it --privileged mininet mn -c
    ;;
+#Test controller with a simple mininet linear topology
 -t)
    docker exec -it --privileged mininet mn --controller=remote,ip=10.0.1.10 --topo=linear,3
    ;;
+#Kill and close all containers
 -k)
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml down
    ;;
@@ -66,7 +71,7 @@ case $1 in
    echo "do something here"
    ;;
 *)
-  echo $"Usage: $0 <option> <SDNCONTROLLER>[PERFORMANCE TEST]"
+  echo $"Usage: $0 <option> <SDNCONTROLLER> [PERFORMANCE TEST] [Topology] "
   exit 1
 esac
 

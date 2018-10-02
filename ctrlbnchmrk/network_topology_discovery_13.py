@@ -22,12 +22,18 @@ import config
 CBMHOME=os.environ.get("CBMHOME",None)
 CONTROLLER = os.environ.get("CONTROLLER", None)
 VINTERFACE = os.environ.get("VINTERFACE", None)
+SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
 TOPOLOGY = sys.argv[1]
+
+if TOPOLOGY == "linear":
+   expected_num_links = (SWITCH_NUM*2)-2
+elif TOPOLOGY == "datacenter":
+   expected_num_links = (SWITCH_NUM*2)
+
+print ("Topology: %s - Switches: %u - Links: %u" % (TOPOLOGY, SWITCH_NUM, expected_num_links))
 
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
 SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
-SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
-print SWITCH_NUM
 my_logger_csv = caplog.get_logger('TSHARK','csv')
 docker_csv = caplog.get_logger('DOCKER','csv')
 #my_logger_json = caplog.get_logger('TSHARK','json')
@@ -40,7 +46,7 @@ def tshark_disect(q):
    #cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -Y "%s" -a duration:%u' % \
 #   cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -a duration:%u' % \
 #    (VINTERFACE, OF_PORT, SCAN_TIME)
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|Datapath|In port|OFPT_FEATURES_REPLY|PACKET_IN|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|[Dd]atapath|In port|OFPT_FEATURES_REPLY|OFPT_PACKET_IN|Value|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    link_number=0
    #output = check_output(cmd, stderr=STDOUT, timeout=seconds)
@@ -48,18 +54,21 @@ def tshark_disect(q):
    #tshark=subprocess.check_output(cmdtshark)
    begin_flag = False
    PIN_flag = False
+   FTRS_flag = False
    while True:
       line = tshark.stdout.readline()
       if "Arrival Time" in line:
          begin_flag = False
          PIN_flag = False
+         FTRS_flag = False
          temp_timestamp = line.split()[5]
       elif "Source Port" in line:
          temp_tcp_port = line.split()[2]
       elif "OFPT_FEATURES_REPLY" in line:
          timestamp = temp_timestamp
          tcp_port = temp_tcp_port
-      elif "Datapath" in line:
+         FTRS_flag = True
+      elif re.match(r' *[Dd]atapath', line) and FTRS_flag == True:
          sw = line.split("x")[1].strip()
          sw_array[tcp_port] = [sw,timestamp]
 #         print (sw,tcp_port)
@@ -67,12 +76,11 @@ def tshark_disect(q):
          PIN_flag = True
          timestamp = temp_timestamp
          tcp_port = temp_tcp_port
-      elif "In port" in line and PIN_flag == True:
-         #print "Match In Port"
-         sw_port_in = line.split()[2]
       elif re.match(r' *Reason.*(1)', line):
          begin_flag = True
-      elif "Chassis Subtype" in line and begin_flag == True:
+      elif "Value" in line and begin_flag == True and PIN_flag == True:
+         sw_port_in = line.split(":")[1]
+      elif "Chassis Subtype" in line and begin_flag == True and PIN_flag == True:
          if CONTROLLER =="ryu":
             sw_linked = line.split(":")[2].strip()
          elif CONTROLLER == "pox":
@@ -80,7 +88,7 @@ def tshark_disect(q):
          elif CONTROLLER == "odl":
             sw_linked = line.split("Id:")[1].strip()
 #         print sw_linked
-      elif "Port Subtype" in line and begin_flag == True:
+      elif "Port Subtype" in line and begin_flag == True and PIN_flag == True:
          port_linked = line.split(":")[1].strip()
          link_number += 1
 #         print (port_linked)
@@ -92,10 +100,6 @@ def tshark_disect(q):
       #elif "OFPT_PACKET_OUT" in line:
       #   begin_flag = False
       
-      if TOPOLOGY == "linear":
-         expected_num_links = (SWITCH_NUM*2)-2
-      elif TOPOLOGY == "datacenter":
-         expected_num_links = (SWITCH_NUM*2)
       if len(link_array) == expected_num_links:
          print ("Links: %u" % len(link_array))
          print ("Switches %u" % len(sw_array))

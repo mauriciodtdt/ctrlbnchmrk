@@ -32,5 +32,5 @@ NET_TOPO_TIME = {
 }
 
 MININET_CONFIG = {
-   'SWITCH_NUM': 20
+   'SWITCH_NUM': 50
 }
