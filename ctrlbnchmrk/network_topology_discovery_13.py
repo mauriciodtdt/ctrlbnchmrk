@@ -85,7 +85,7 @@ def tshark_disect(q):
             sw_linked = line.split(":")[2].strip()
          elif CONTROLLER == "pox":
             sw_linked = line.split(":")[2].strip()
-         elif CONTROLLER == "odl":
+         elif CONTROLLER == "odl" or "onos":
             sw_linked = line.split("Id:")[1].strip()
 #         print sw_linked
       elif "Port Subtype" in line and begin_flag == True and PIN_flag == True:
