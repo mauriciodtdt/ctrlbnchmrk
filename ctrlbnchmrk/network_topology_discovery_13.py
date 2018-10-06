@@ -24,15 +24,19 @@ CONTROLLER = os.environ.get("CONTROLLER", None)
 VINTERFACE = os.environ.get("VINTERFACE", None)
 #SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
 TOPOLOGY = sys.argv[1]
-SWITCH_NUM = sys.argv[2]
+SCALE = sys.argv[2]
 RULER_ARGS = sys.argv[1:]
-#HOST_NUM = sys.argv[3]
-#SCALE = sys.argv[4]
 
 if TOPOLOGY == "linear":
-   expected_num_links = ((int(SWITCH_NUM)*2)-2)*int(SCALE)
+   SWITCHES = sys.argv[2]
+   expected_num_links = ((int(SWITCHES)*2)-2)*int(SCALE)
 elif TOPOLOGY == "datacenter":
-   expected_num_links = (int(SWITCH_NUM)*2)*int(SCALE)
+   RACKS = sys.argv[2]
+   expected_num_links = (int(RAKCS)*2)*int(SCALE)
+elif TOPOLOGY == "spineleaf":
+   SPINE = sys.argv[2]
+   LEAF = sys.argv[3]
+   expected_num_links = (int(SPINE)*int(LEAF)*2)*int(SCALE)
 
 print ("Topology: %s - Switches: %s - Links: %s - Scale: %s" % (TOPOLOGY, SWITCH_NUM, expected_num_links, SCALE))
 
