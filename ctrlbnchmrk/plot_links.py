@@ -7,9 +7,10 @@ import matplotlib.dates
 import matplotlib.patches as mpatches
 from datetime import datetime
 import time
+import sys
 
 CONTROLLER = "odl" 
-
+FILE=sys.argv[1]
 
 DATA_PATH='/opt/ctrlbnchmrk/data/'
 
@@ -17,7 +18,7 @@ csvFileTshark = DATA_PATH +'TSHARK.csv'
 #csvFileDocker = DATA_PATH +'DOCKER.csv'
 FMT='%H:%M:%S.%f'
 
-data = pd.read_csv("/opt/ctrlbnchmrk/data/%s_links.csv" % CONTROLLER, ";")
+data = pd.read_csv("/opt/ctrlbnchmrk/data/%s" % FILE, ";")
 #docker_data = pd.read_csv(csvFileDocker,";")
 
 print data.head(2)
@@ -64,10 +65,10 @@ for x in stamptime:
 #plt.plot(pd.to_datetime(docker_time),docker_cpu)
 #plt.legend("docker cpu")
 #plt.figure(2)
-plt.legend("switches discovery")
+plt.legend("links discovery")
 plt.plot_date(pd.to_datetime(stamptime),switches)
 #plt.plot_date(switches,absStamptime)
 #plt.xticks([])
-plt.figtext(.2, .8, "Time= %s" % tdelta)
-plt.figtext(.2, .75, "Switches= %u" % num_switches)
+#plt.figtext(.2, .8, "Time= %s" % tdelta)
+plt.figtext(.2, .75, "Links= %u" % num_switches)
 plt.show()
