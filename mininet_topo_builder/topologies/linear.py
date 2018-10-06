@@ -39,14 +39,8 @@ class LinearBasicTopo( Topo ):
           host = self.addHost( '%sh%s' % ( switch, h ) )
           self.addLink( switch, host )
        return switch
-#           for h in xrange( 1, self.host_num ):
-#              print switch
-            
- 
-        # Return list of top-of-rack switches for this rack
-#        print ("dpid_count: ", self.dpid_count)
  
 # Allows the file to be imported using `mn --custom <filename> --topo dcbasic`
 #topos = {
-#    'dcbasic': DatacenterBasicTopo
+#    'dcbasic': LinearBasicTopo
 #}

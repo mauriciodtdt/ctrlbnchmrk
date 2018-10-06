@@ -22,10 +22,10 @@ export VINTERFACE=$(<$CBMHOME/etc/docker_interface)
 
 #####################################################
 #Setting test arguments
-TOPOLOGY=$4 #linear | datacenter | tree | spineleaf
-SWITCH_NUM=$5
-HOST_NUM=$6
-SCALE=$7 #Num of times to repeat same topology
+#TOPOLOGY=$4 #linear | datacenter | tree | spineleaf
+#SCALE=$5 #Num of times to repeat same topology
+#SWITCH_NUM=$6
+#HOST_NUM=$7
 #####################################################
 
 case $1 in
@@ -41,7 +41,7 @@ case $1 in
    echo "Controller: $CONTROLLER"
    case $3 in
    "1")
-      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery_13.py $TOPOLOGY $SWITCH_NUM $HOST_NUM $SCALE
+      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery_13.py "${@:4}"
       ;;
    "2")
       docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -l   

@@ -6,16 +6,14 @@ from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.node import RemoteController, OVSSwitch
 from topologies import datacenter
-from topologies import spine_leaf
+from topologies import spineleaf
 from topologies import linear
 import multiprocessing as mp
 import time
 import sys
 
 TOPOLOGY = sys.argv[1]
-SWITCH_NUM = int(sys.argv[2])
-HOST_NUM = int(sys.argv[3])
-SCALE = int(sys.argv[4])
+SCALE = int(sys.argv[2])
 
 
 def build_network():
@@ -26,10 +24,20 @@ def build_network():
     for x in range( SCALE ):
     # Create an instance of specified topology
        if TOPOLOGY == "linear":
+          SWITCH_NUM = int(sys.argv[3])
+          HOST_NUM = int(sys.argv[4])
           multiple_topos.append(linear.LinearBasicTopo(dpid, SWITCH_NUM,HOST_NUM))
           dpid = multiple_topos[x].dpid_count
        elif TOPOLOGY == "datacenter":
-          multiple_topos.append(datacenter.DatacenterBasicTopo(dpid, SWITCH_NUM,HOST_NUM))
+          RACK_NUM = int(sys.argv[3])
+          HOST_NUM = int(sys.argv[4])
+          multiple_topos.append(datacenter.DatacenterBasicTopo(dpid, RACK_NUM,HOST_NUM))
+          dpid = multiple_topos[x].dpid_count
+       elif TOPOLOGY == "spineleaf":
+          SPINE_NUM = int(sys.argv[3])
+          LEAF_NUM = int(sys.argv[4])
+          HOST_NUM = int(sys.argv[5])
+          multiple_topos.append(spineleaf.SpineLeafBasicTopo(dpid, SPINE_NUM, LEAF_NUM, HOST_NUM))
           dpid = multiple_topos[x].dpid_count
 
     # Create a network based on the topology using OVS and controlled by
