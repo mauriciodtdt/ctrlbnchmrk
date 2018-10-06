@@ -15,33 +15,32 @@ import sys
 TOPOLOGY = sys.argv[1]
 SWITCH_NUM = int(sys.argv[2])
 HOST_NUM = int(sys.argv[3])
+SCALE = int(sys.argv[4])
 
 
-dpid_count=0
-
-def run_datacenter():
+def build_network():
     "Bootstrap a Mininet network using the Minimal Topology"
- 
-    # Create an instance of our topology
-    #multiple_topos = []
-    #Topology with  5 racks and 10 hosts
-    if TOPOLOGY == "linear":
-        topo = linear.LinearBasicTopo(dpid_count,SWITCH_NUM,HOST_NUM)
-    elif TOPOLOGY == "datacenter":
-        topo = datacenter.DatacenterBasicTopo(dpid_count,SWITCH_NUM,HOST_NUM)
-    #Topology with 10 racks and 20 hosts
-    #topo2 = datacenter.DatacenterBasicTopo(topo.dpid_count,10,20)
-    #multiple_topos = [topo,topo2]
-
+    dpid = 0
+    multiple_topos = []
+    multiple_nets = []
+    for x in range( SCALE ):
+    # Create an instance of specified topology
+       if TOPOLOGY == "linear":
+          multiple_topos.append(linear.LinearBasicTopo(dpid, SWITCH_NUM,HOST_NUM))
+          dpid = multiple_topos[x].dpid_count
+       elif TOPOLOGY == "datacenter":
+          multiple_topos.append(datacenter.DatacenterBasicTopo(dpid, SWITCH_NUM,HOST_NUM))
+          dpid = multiple_topos[x].dpid_count
 
     # Create a network based on the topology using OVS and controlled by
     # a remote controller.
-    net = Mininet(
-        topo=topo,
-        controller=lambda name: RemoteController( name, ip='10.0.1.10'),
-        switch=OVSSwitch,
-#        protocols=OpenFlow13,
-        autoSetMacs=True )
+    for x in range( SCALE ):
+       multiple_nets.append( Mininet(
+          topo=multiple_topos[x],
+          controller=lambda name: RemoteController( name, ip='10.0.1.10'),
+          switch=OVSSwitch,
+#         protocols=OpenFlow13,
+          autoSetMacs=True ))
 
     #net2 = Mininet(
     #    topo=topo2,
@@ -55,9 +54,9 @@ def run_datacenter():
     print ("Wait 20 secs before start controller")
     time.sleep(20)    
     # Actually start the network
-    print 
-    net.start()
-#    net2.start()
+    
+    for net in multiple_nets:
+       net.start()
  
     # print "Controller Connected"
     CLI ( net )
@@ -68,8 +67,9 @@ def run_datacenter():
     
 #    net.stop()
  #   net2.stop()
+
  
 if __name__ == '__main__':
     # This runs if this file is executed directly
     setLogLevel( 'info' )
-    run_datacenter()
+    build_network()

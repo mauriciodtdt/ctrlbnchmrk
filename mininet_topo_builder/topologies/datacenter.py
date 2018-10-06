@@ -44,7 +44,6 @@ class DatacenterBasicTopo( Topo ):
             self.addLink( switch, host )
  
         # Return list of top-of-rack switches for this rack
-        print ("dpid_count: ", self.dpid_count)
         return [switch]
  
 # Allows the file to be imported using `mn --custom <filename> --topo dcbasic`

@@ -26,6 +26,7 @@ VINTERFACE = os.environ.get("VINTERFACE", None)
 TOPOLOGY = sys.argv[1]
 SWITCH_NUM = sys.argv[2]
 HOST_NUM = sys.argv[3]
+SCALE = sys.argv[4]
 
 if TOPOLOGY == "linear":
    expected_num_links = (int(SWITCH_NUM)*2)-2
@@ -138,7 +139,7 @@ def mininet_master(q):
 #   if TOPOLOGY == "linear":
 #      docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=%s,%u --mac --switch=ovsk,protocols=OpenFlow13" % (TOPOLOGY, SWITCH_NUM)
 #   elif TOPOLOGY == "datacenter":
-   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s" % (TOPOLOGY, SWITCH_NUM, HOST_NUM) 
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s" % (TOPOLOGY, SWITCH_NUM, HOST_NUM, SCALE) 
  
    print ("%s" % docker_command)
    ### exec_run has to be tty=True and privileged
