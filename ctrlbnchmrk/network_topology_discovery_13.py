@@ -29,11 +29,11 @@ HOST_NUM = sys.argv[3]
 SCALE = sys.argv[4]
 
 if TOPOLOGY == "linear":
-   expected_num_links = (int(SWITCH_NUM)*2)-2
+   expected_num_links = ((int(SWITCH_NUM)*2)-2)*int(SCALE)
 elif TOPOLOGY == "datacenter":
-   expected_num_links = (int(SWITCH_NUM)*2)
+   expected_num_links = (int(SWITCH_NUM)*2)*int(SCALE)
 
-print ("Topology: %s - Switches: %s - Links: %s" % (TOPOLOGY, SWITCH_NUM, expected_num_links))
+print ("Topology: %s - Switches: %s - Links: %s - Scale: %s" % (TOPOLOGY, SWITCH_NUM, expected_num_links, SCALE))
 
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
 SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
