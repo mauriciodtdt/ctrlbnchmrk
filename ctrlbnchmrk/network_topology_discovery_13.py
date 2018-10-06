@@ -96,12 +96,12 @@ def tshark_disect(q):
          link_number += 1
 #         print (port_linked)
          sw_link_left = sw_array[tcp_port][0]
-         link_info = "%u;%s-%s<-->%s-%s" % (link_number,sw_link_left, sw_port_in,sw_linked,port_linked)
-         tshark_logger_csv.debug(link_info)
+         link_info = "%s-%s<-->%s-%s" % (sw_link_left, sw_port_in,sw_linked,port_linked)
+         tshark_logger_csv.debug("%s;%s" % (link_number, link_info))
          if not link_info in link_array:
             link_array[link_info] = timestamp
-      #elif "OFPT_PACKET_OUT" in line:
-      #   begin_flag = False
+      elif "OFPT_PACKET_OUT" in line:
+         begin_flag = False
       
       if len(link_array) == expected_num_links:
          print ("Links: %u" % len(link_array))
