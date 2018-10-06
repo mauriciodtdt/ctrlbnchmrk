@@ -38,7 +38,7 @@ def run_datacenter():
     # a remote controller.
     net = Mininet(
         topo=topo,
-        controller=lambda name: RemoteController( name, ip='10.0.1.10' ),
+        controller=lambda name: RemoteController( name, ip='10.0.1.10', port=6653 ),
         switch=OVSSwitch,
 #        protocols=OpenFlow13,
         autoSetMacs=True )

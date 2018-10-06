@@ -78,10 +78,10 @@ def tshark_disect(q):
          PIN_flag = True
          timestamp = temp_timestamp
          tcp_port = temp_tcp_port
-      elif re.match(r' *Reason.*(1)', line):
+      elif re.match(r' *Reason.*(0)', line): #if it's floodlight change for 0 - wrong reason tho, should be 1 
          begin_flag = True
       elif "Value" in line and begin_flag == True and PIN_flag == True:
-         sw_port_in = line.split(":")[1]
+         sw_port_in = line.split(":")[1].strip()
       elif "Chassis Subtype" in line and begin_flag == True and PIN_flag == True:
          if CONTROLLER =="ryu":
             sw_linked = line.split(":")[2].strip()
