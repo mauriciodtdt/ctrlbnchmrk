@@ -22,15 +22,17 @@ import config
 CBMHOME=os.environ.get("CBMHOME",None)
 CONTROLLER = os.environ.get("CONTROLLER", None)
 VINTERFACE = os.environ.get("VINTERFACE", None)
-SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
+#SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
 TOPOLOGY = sys.argv[1]
+SWITCH_NUM = sys.argv[2]
+HOST_NUM = sys.argv[3]
 
 if TOPOLOGY == "linear":
-   expected_num_links = (SWITCH_NUM*2)-2
+   expected_num_links = (int(SWITCH_NUM)*2)-2
 elif TOPOLOGY == "datacenter":
-   expected_num_links = (SWITCH_NUM*2)
+   expected_num_links = (int(SWITCH_NUM)*2)
 
-print ("Topology: %s - Switches: %u - Links: %u" % (TOPOLOGY, SWITCH_NUM, expected_num_links))
+print ("Topology: %s - Switches: %s - Links: %s" % (TOPOLOGY, SWITCH_NUM, expected_num_links))
 
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
 SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
@@ -133,10 +135,10 @@ def mininet_master(q):
    print container
    ### exec_run has to be tty=True and privileged
 #   print container.exec_run("/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py",tty=True, privileged=True)
-   if TOPOLOGY == "linear":
-      docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=linear,50 --mac --switch=ovsk,protocols=OpenFlow13"
-   elif TOPOLOGY == "datacenter":
-      docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py"
+#   if TOPOLOGY == "linear":
+#      docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=%s,%u --mac --switch=ovsk,protocols=OpenFlow13" % (TOPOLOGY, SWITCH_NUM)
+#   elif TOPOLOGY == "datacenter":
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s" % (TOPOLOGY, SWITCH_NUM, HOST_NUM) 
  
    print ("%s" % docker_command)
    ### exec_run has to be tty=True and privileged

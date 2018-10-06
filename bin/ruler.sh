@@ -20,6 +20,13 @@ export CONTROLLER=$2
 export VINTERFACE=$(<$CBMHOME/etc/docker_interface)
 #####################################################
 
+#####################################################
+#Setting test arguments
+TOPOLOGY=$4
+SWITCH_NUM=$5
+HOST_NUM=$6
+#####################################################
+
 case $1 in
 #Deploy controller and services (mininet and cbench)
 -D)
@@ -33,7 +40,7 @@ case $1 in
    echo "Controller: $CONTROLLER"
    case $3 in
    "1")
-      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery_13.py $4
+      /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery_13.py $TOPOLOGY $SWITCH_NUM $HOST_NUM
       ;;
    "2")
       docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -l   

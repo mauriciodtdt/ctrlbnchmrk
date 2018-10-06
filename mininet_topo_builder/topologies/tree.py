@@ -26,6 +26,7 @@ class DatacenterBasicTopo( Topo ):
     def build( self ):
         self.racks = []
         self.dpid_count += 1
+        dpid = (self.dpid_count * 16) 
         rootSwitch = self.addSwitch( 's%s' % self.dpid_count, dpid = '%x' % self.dpid_count)
         for i in irange( 1, self.rack_num ):
             rack = self.buildRack( i )
@@ -37,6 +38,7 @@ class DatacenterBasicTopo( Topo ):
         "Build a rack of hosts with a top-of-rack switch"
  
         self.dpid_count += 1
+        dpid = (self.dpid_count * 16) 
         switch = self.addSwitch( 's%sr%s' % (self.dpid_count,i), dpid='%x' % self.dpid_count )
  
         for j in irange( 1, self.host_num ):
@@ -44,6 +46,7 @@ class DatacenterBasicTopo( Topo ):
             self.addLink( switch, host )
  
         # Return list of top-of-rack switches for this rack
+        print ("dpid: %x" %  dpid)
         print ("dpid_count: ", self.dpid_count)
         return [switch]
  
