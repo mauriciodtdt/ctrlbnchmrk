@@ -25,20 +25,28 @@ VINTERFACE = os.environ.get("VINTERFACE", None)
 #SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
 TOPOLOGY = sys.argv[1]
 SCALE = sys.argv[2]
-RULER_ARGS = sys.argv[1:]
 
 if TOPOLOGY == "linear":
-   SWITCHES = sys.argv[2]
-   expected_num_links = ((int(SWITCHES)*2)-2)*int(SCALE)
+   SWITCHES = int(sys.argv[3])
+   HOSTS = int(sys.argv[4])
+   expected_num_links = (SWITCHES*2-2)*int(SCALE)
+   expected_num_switches = SWITCHES*int(SCALE)
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s" % (TOPOLOGY, SCALE, SWITCHES, HOSTS)
 elif TOPOLOGY == "datacenter":
-   RACKS = sys.argv[2]
-   expected_num_links = (int(RAKCS)*2)*int(SCALE)
+   RACKS = int(sys.argv[3])
+   HOSTS = int(sys.argv[4])
+   expected_num_links = (RACKS*2)*int(SCALE)
+   expected_num_switches = (1+RACKS)*int(SCALE)
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s" % (TOPOLOGY, SCALE, RACKS, HOSTS)
 elif TOPOLOGY == "spineleaf":
-   SPINE = sys.argv[2]
-   LEAF = sys.argv[3]
-   expected_num_links = (int(SPINE)*int(LEAF)*2)*int(SCALE)
+   SPINE = int(sys.argv[3])
+   LEAF = int(sys.argv[4])
+   HOSTS = int(sys.argv[5])
+   expected_num_links = (SPINE*LEAF*2)*int(SCALE)
+   expected_num_switches = (SPINE + LEAF)*int(SCALE)
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s %s" % (TOPOLOGY, SCALE, SPINE, LEAF, HOSTS)
 
-print ("Topology: %s - Switches: %s - Links: %s - Scale: %s" % (TOPOLOGY, SWITCH_NUM, expected_num_links, SCALE))
+print ("Topology: %s - Scale: %s - Expected Switches: %s - Expected Links: %s" % (TOPOLOGY, SCALE, expected_num_switches, expected_num_links))
 
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
 SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
@@ -144,7 +152,6 @@ def mininet_master(q):
 #   if TOPOLOGY == "linear":
 #      docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=%s,%u --mac --switch=ovsk,protocols=OpenFlow13" % (TOPOLOGY, SWITCH_NUM)
 #   elif TOPOLOGY == "datacenter":
-   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s" % RULER_ARGS
  
    print ("%s" % docker_command)
    ### exec_run has to be tty=True and privileged
