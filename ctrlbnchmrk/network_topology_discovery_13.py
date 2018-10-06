@@ -36,8 +36,8 @@ print ("Topology: %s - Switches: %s - Links: %s" % (TOPOLOGY, SWITCH_NUM, expect
 
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
 SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
-my_logger_csv = caplog.get_logger('TSHARK','csv')
-docker_csv = caplog.get_logger('DOCKER','csv')
+tshark_logger_csv = caplog.get_logger("TSHARK-%s" % CONTROLLER,'csv')
+docker_logger_csv = caplog.get_logger("DOCKER-%s" % CONTROLLER,'csv')
 #my_logger_json = caplog.get_logger('TSHARK','json')
 
 sw_array = {}
@@ -96,7 +96,7 @@ def tshark_disect(q):
 #         print (port_linked)
          sw_link_left = sw_array[tcp_port][0]
          link_info = "%u;%s-%s<-->%s-%s" % (link_number,sw_link_left, sw_port_in,sw_linked,port_linked)
-         my_logger_csv.debug(link_info)
+         tshark_logger_csv.debug(link_info)
          if not link_info in link_array:
             link_array[link_info] = timestamp
       #elif "OFPT_PACKET_OUT" in line:
@@ -127,7 +127,7 @@ def  docker_container_stats(q):
       (cpu_container,mem_container) = ds.get_cpuram(CONTROLLER)
       results_csv = '%f;%u' \
        % (cpu_container,mem_container)
-      docker_csv.debug(results_csv)
+      docker_logger_csv.debug(results_csv)
 
 def mininet_master(q):
    client = docker.from_env()
@@ -142,7 +142,7 @@ def mininet_master(q):
  
    print ("%s" % docker_command)
    ### exec_run has to be tty=True and privileged
-   container.exec_run(docker_command, tty=True, privileged=True) 
+   print container.exec_run(docker_command, tty=True, privileged=True) 
 
 def main():
 

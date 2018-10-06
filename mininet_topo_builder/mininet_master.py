@@ -52,8 +52,8 @@ def run_datacenter():
     #print "Topology Deployed: Connect Controller?"
     
     #CLI( net )
-    print ("Wait 60 secs before start controller")
-    time.sleep(60)    
+    print ("Wait 20 secs before start controller")
+    time.sleep(20)    
     # Actually start the network
     print 
     net.start()

@@ -19,10 +19,8 @@ def get_cpuram(CONTROLLER):
    host_delta = cli['cpu_stats']['system_cpu_usage'] \
     - cli['precpu_stats']['system_cpu_usage']
    percpu_usage = len(cli['cpu_stats']['cpu_usage']['percpu_usage'])
-#   percpu_usage = 1
    if host_delta > 0 and container_delta > 0:
       cpu_percentage = (float(container_delta)/float(host_delta))*percpu_usage*100
-      # * cli['cpu_stats']['cpu_usage']['percpu_usage']
    mem = (cli['memory_stats']['usage'] - cli['memory_stats']['stats']['cache'])/1048576
    return (cpu_percentage,mem)
 
@@ -30,7 +28,3 @@ def get_ram(CONTROLLER):
    cli=client.stats(container=CONTROLLER,decode=True, stream=False)
    mem = (cli['memory_stats']['usage'] - cli['memory_stats']['stats']['cache'])/1048576
    return mem
-
-#while True:
-#   print get_cpuram()
-#   time.sleep(1)
