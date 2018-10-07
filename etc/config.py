@@ -10,12 +10,12 @@ CONF = {
 
 
 CBENCH_CONFIG = {
-   'NUM_SWITCHES': '5', # Default number of switches for CBench to simulate
-   'NUM_MACS': '100', # Default number of MACs for CBench to use
-   'TESTS_PER_SWITCH': '4', # Default (11) number of CBench tests to do per CBench run
+   'NUM_SWITCHES': '32', # Default number of switches for CBench to simulate
+   'NUM_MACS': '1000', # Default number of MACs for CBench to use
+   'TESTS_PER_SWITCH': '11', # Default (11) number of CBench tests to do per CBench run
    'MS_PER_TEST': '500', # Default milliseconds to run each CBench test
    'CBENCH_WARMUP': '1', # Default number of warmup cycles to run CBench
-   'TEST_LOOP': 3 #Times that CBench will run
+   'TEST_LOOP': 10 #Times that CBench will run
 }
 
 NET_TOPO_TIME = {

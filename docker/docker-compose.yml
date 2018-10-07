@@ -40,6 +40,7 @@ services:
       - "8080:8080"
     tty: true
     command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py --observe-links"
+#    command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch.py"
     volumes:
       - shareVolume:/opt/  
     networks:

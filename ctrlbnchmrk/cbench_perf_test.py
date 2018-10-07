@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import subprocess
 import logging
+import time
 import re
 import json
 import sys
@@ -17,18 +18,18 @@ NUM_SWITCHES=config.CBENCH_CONFIG['NUM_SWITCHES']
 NUM_MACS=config.CBENCH_CONFIG['NUM_MACS']
 CBENCH_WARMUP=config.CBENCH_CONFIG['CBENCH_WARMUP']
 TEST_LOOP=config.CBENCH_CONFIG['TEST_LOOP']
+CONTROLLER=sys.argv[1]
 
-my_logger_csv = caplog.get_logger("CBENCH",'csv')
 #my_logger_json = caplog.get_logger("CBENCH",'json')
   
 ##########################################################
 # Cbench run with parameters imported from cbenchConf file
 ##########################################################
 
-i=0
-if sys.argv[1] == "-t":
-   #cbench throughput mode -t
-    cmdcbench = 'cbench -c %s -p %s -m %s -l %s -s %s -M %s -w %s -t' \
+if sys.argv[2] == "-l":
+   #cbench throughput mode -l
+    my_logger_csv = caplog.get_logger("2-CBENCH-%s" % CONTROLLER,'csv')
+    cmdcbench = 'cbench -c %s -p %s -m %s -l %s -s %s -M %s -w %s' \
     % (CONTROLLER_IP, 
        CONTROLLER_PORT, 
        MS_PER_TEST, 
@@ -36,9 +37,11 @@ if sys.argv[1] == "-t":
        NUM_SWITCHES, 
        NUM_MACS, 
        CBENCH_WARMUP)
-else:
+elif sys.argv[2] == "-t":
    #cbench latency mode
-    cmdcbench = 'cbench -c %s -p %s -m %s -l %s -s %s -M %s -w %s' \
+    TEST_LOOP = 1
+    my_logger_csv = caplog.get_logger("3-CBENCH-%s" % CONTROLLER,'csv')
+    cmdcbench = 'cbench -c %s -p %s -m %s -l %s -s %s -M %s -w %s -t' \
     % (CONTROLLER_IP, 
        CONTROLLER_PORT, 
        MS_PER_TEST, 
@@ -49,7 +52,7 @@ else:
 
 print cmdcbench
 print "switches;macs;avgFlowsSec"
-while i < TEST_LOOP:
+for i in range ( TEST_LOOP ):
    print "Loop: %u" % i
    cbench=subprocess.Popen(cmdcbench, stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE)
    (output, err) = cbench.communicate()
@@ -63,4 +66,4 @@ while i < TEST_LOOP:
 #   results_json = '{switches: %s, macs: %s, avg_num_flows: %s}' % (switches,macs,avg_num_flows)
    my_logger_csv.debug(results_csv)
 #   my_logger_json.debug(results_json)
-   i+=1
+   time.sleep(5)

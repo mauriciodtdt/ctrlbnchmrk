@@ -59,8 +59,8 @@ def build_network():
     #print "Topology Deployed: Connect Controller?"
     
     #CLI( net )
-    print ("Wait 20 secs before start controller")
-    time.sleep(20)    
+    print ("Wait 10 secs before start controller")
+    time.sleep(10)    
     # Actually start the network
     
     for net in multiple_nets:

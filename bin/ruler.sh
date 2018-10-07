@@ -44,10 +44,12 @@ case $1 in
       /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery_13.py "${@:4}"
       ;;
    "2")
-      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -l   
+      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py $CONTROLLER -l   
+      cp /var/lib/docker/volumes/docker_shareVolume/_data/ctrlbnchmrk/data/*CBENCH* /opt/ctrlbnchmrk/data
       ;;
    "3")
-      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py -t
+      docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py $CONTROLLER -t
+      cp /var/lib/docker/volumes/docker_shareVolume/_data/ctrlbnchmrk/data/*CBENCH* /opt/ctrlbnchmrk/data
       ;;
    "4")
       ./NetworkTopologyTime.py

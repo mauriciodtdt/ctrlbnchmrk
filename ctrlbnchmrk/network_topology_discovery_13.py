@@ -62,7 +62,8 @@ def tshark_disect(q):
    #cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -Y "%s" -a duration:%u' % \
 #   cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -a duration:%u' % \
 #    (VINTERFACE, OF_PORT, SCAN_TIME)
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|[Dd]atapath|In port|OFPT_FEATURES_REPLY|OFPT_PACKET_IN|Value|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
+   #cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|[Dd]atapath|OFPT_FEATURES_REPLY|OFPT_PACKET_IN|Value|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|[Dd]atapath|OFPT_FEATURES_REPLY|OFPT_PACKET_IN|Value|Chassis Subtype|Port Subtype'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    link_number=0
    #output = check_output(cmd, stderr=STDOUT, timeout=seconds)
@@ -92,7 +93,7 @@ def tshark_disect(q):
          PIN_flag = True
          timestamp = temp_timestamp
          tcp_port = temp_tcp_port
-      elif re.match(r' *Reason.*(1)', line): #default 1 - if it's floodlight change for 0 - wrong reason tho
+#      elif re.match(r' *Reason.*(0)', line): #default 1 - if it's floodlight change for 0 - wrong reason tho
          begin_flag = True
       elif "Value" in line and begin_flag == True and PIN_flag == True:
          sw_port_in = line.split(":")[1].strip()
@@ -113,8 +114,8 @@ def tshark_disect(q):
             link_number += 1
             tshark_logger_csv.debug("%s;%s;%s" % (timestamp, link_number, link_info))
             link_array[link_info] = (timestamp,link_number)
-      elif "OFPT_PACKET_OUT" in line:
-         begin_flag = False
+#      elif "OFPT_PACKET_OUT" in line:
+#         begin_flag = False
       
       if len(link_array) == expected_num_links:
          print ("Links: %u" % len(link_array))
