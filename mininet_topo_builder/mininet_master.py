@@ -10,33 +10,34 @@ from topologies import spineleaf
 from topologies import linear
 import multiprocessing as mp
 import time
+import datetime
 import sys
 
 TOPOLOGY = sys.argv[1]
 SCALE = int(sys.argv[2])
-
+DPID_COUNT = int(sys.argv[3])
 
 def build_network():
     "Bootstrap a Mininet network using the Minimal Topology"
-    dpid = 0
+    dpid = DPID_COUNT
     multiple_topos = []
     multiple_nets = []
     for x in range( SCALE ):
     # Create an instance of specified topology
        if TOPOLOGY == "linear":
-          SWITCH_NUM = int(sys.argv[3])
-          HOST_NUM = int(sys.argv[4])
+          SWITCH_NUM = int(sys.argv[4])
+          HOST_NUM = int(sys.argv[5])
           multiple_topos.append(linear.LinearBasicTopo(dpid, SWITCH_NUM,HOST_NUM))
           dpid = multiple_topos[x].dpid_count
        elif TOPOLOGY == "datacenter":
-          RACK_NUM = int(sys.argv[3])
-          HOST_NUM = int(sys.argv[4])
+          RACK_NUM = int(sys.argv[4])
+          HOST_NUM = int(sys.argv[5])
           multiple_topos.append(datacenter.DatacenterBasicTopo(dpid, RACK_NUM,HOST_NUM))
           dpid = multiple_topos[x].dpid_count
        elif TOPOLOGY == "spineleaf":
-          SPINE_NUM = int(sys.argv[3])
-          LEAF_NUM = int(sys.argv[4])
-          HOST_NUM = int(sys.argv[5])
+          SPINE_NUM = int(sys.argv[4])
+          LEAF_NUM = int(sys.argv[5])
+          HOST_NUM = int(sys.argv[6])
           multiple_topos.append(spineleaf.SpineLeafBasicTopo(dpid, SPINE_NUM, LEAF_NUM, HOST_NUM))
           dpid = multiple_topos[x].dpid_count
 
@@ -50,21 +51,17 @@ def build_network():
 #         protocols=OpenFlow13,
           autoSetMacs=True ))
 
-    #net2 = Mininet(
-    #    topo=topo2,
-    #    controller=lambda name: RemoteController( name, ip='10.0.1.10' ),
-    #    switch=OVSSwitch,
-    #    autoSetMacs=True )
-
-    #print "Topology Deployed: Connect Controller?"
-    
-    #CLI( net )
     print ("Wait 10 secs before start controller")
     time.sleep(10)    
     # Actually start the network
-    
+    with open ("/opt/ctrlbnchmrk/data/mininet_time_before.csv", mode='w')     as sw_file:
+             sw_file.write("Time before start network(s): %s\n" % str(datetime.datetime.now()))
+
     for net in multiple_nets:
        net.start()
+
+    with open ("/opt/ctrlbnchmrk/data/mininet_time_after.csv", mode='w')     as sw_file:
+             sw_file.write("Time after start network(s): %s\n" % str(datetime.datetime.now()))
  
     # print "Controller Connected"
     CLI ( net )

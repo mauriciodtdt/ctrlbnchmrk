@@ -25,23 +25,24 @@ VINTERFACE = os.environ.get("VINTERFACE", None)
 #SWITCH_NUM=config.MININET_CONFIG['SWITCH_NUM']
 TOPOLOGY = sys.argv[1]
 SCALE = sys.argv[2]
+DPID_START=sys.argv[3]
 
 if TOPOLOGY == "linear":
-   SWITCHES = int(sys.argv[3])
-   HOSTS = int(sys.argv[4])
+   SWITCHES = int(sys.argv[4])
+   HOSTS = int(sys.argv[5])
    expected_num_links = (SWITCHES*2-2)*int(SCALE)
    expected_num_switches = SWITCHES*int(SCALE)
    docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s" % (TOPOLOGY, SCALE, SWITCHES, HOSTS)
 elif TOPOLOGY == "datacenter":
-   RACKS = int(sys.argv[3])
-   HOSTS = int(sys.argv[4])
+   RACKS = int(sys.argv[4])
+   HOSTS = int(sys.argv[5])
    expected_num_links = (RACKS*2)*int(SCALE)
    expected_num_switches = (1+RACKS)*int(SCALE)
    docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s" % (TOPOLOGY, SCALE, RACKS, HOSTS)
 elif TOPOLOGY == "spineleaf":
-   SPINE = int(sys.argv[3])
-   LEAF = int(sys.argv[4])
-   HOSTS = int(sys.argv[5])
+   SPINE = int(sys.argv[4])
+   LEAF = int(sys.argv[5])
+   HOSTS = int(sys.argv[6])
    expected_num_links = (SPINE*LEAF*2)*int(SCALE)
    expected_num_switches = (SPINE + LEAF)*int(SCALE)
    docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s %s" % (TOPOLOGY, SCALE, SPINE, LEAF, HOSTS)
