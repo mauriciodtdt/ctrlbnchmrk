@@ -32,20 +32,21 @@ if TOPOLOGY == "linear":
    HOSTS = int(sys.argv[5])
    expected_num_links = (SWITCHES*2-2)*int(SCALE)
    expected_num_switches = SWITCHES*int(SCALE)
-   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s" % (TOPOLOGY, SCALE, SWITCHES, HOSTS)
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s %s" % (TOPOLOGY, SCALE, DPID_START, SWITCHES, HOSTS)
+#   docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=linear,300,1 --mac --switch=ovsk,protocols=OpenFlow13"
 elif TOPOLOGY == "datacenter":
    RACKS = int(sys.argv[4])
    HOSTS = int(sys.argv[5])
    expected_num_links = (RACKS*2)*int(SCALE)
    expected_num_switches = (1+RACKS)*int(SCALE)
-   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s" % (TOPOLOGY, SCALE, RACKS, HOSTS)
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s %s" % (TOPOLOGY, SCALE, DPID_START, RACKS, HOSTS)
 elif TOPOLOGY == "spineleaf":
    SPINE = int(sys.argv[4])
    LEAF = int(sys.argv[5])
    HOSTS = int(sys.argv[6])
    expected_num_links = (SPINE*LEAF*2)*int(SCALE)
    expected_num_switches = (SPINE + LEAF)*int(SCALE)
-   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s %s" % (TOPOLOGY, SCALE, SPINE, LEAF, HOSTS)
+   docker_command = "/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py %s %s %s %s %s %s" % (TOPOLOGY, SCALE, DPID_START, SPINE, LEAF, HOSTS)
 
 print ("Topology: %s - Scale: %s - Expected Switches: %s - Expected Links: %s" % (TOPOLOGY, SCALE, expected_num_switches, expected_num_links))
 
@@ -60,11 +61,7 @@ link_array = {}
   
 def tshark_disect(q):
    #add -O to dissect packet in detail
-   #cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -Y "%s" -a duration:%u' % \
-#   cmdtshark = 'tshark -i %s -d tcp.port==%s,openflow -a duration:%u' % \
-#    (VINTERFACE, OF_PORT, SCAN_TIME)
-   #cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|[Dd]atapath|OFPT_FEATURES_REPLY|OFPT_PACKET_IN|Value|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|[Dd]atapath|OFPT_FEATURES_REPLY|OFPT_PACKET_IN|Value|Chassis Subtype|Port Subtype'" % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Arrival Time|Source Port|[Dd]atapath|OFPT_FEATURES_REPLY|OFPT_PACKET_IN|Value|Chassis Subtype|Port Subtype|Reason'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    link_number=0
    #output = check_output(cmd, stderr=STDOUT, timeout=seconds)
@@ -94,7 +91,7 @@ def tshark_disect(q):
          PIN_flag = True
          timestamp = temp_timestamp
          tcp_port = temp_tcp_port
-#      elif re.match(r' *Reason.*(0)', line): #default 1 - if it's floodlight change for 0 - wrong reason tho
+      elif re.match(r' *Reason.*(1)', line): #default 1 - if it's floodlight change for 0 - wrong reason tho
          begin_flag = True
       elif "Value" in line and begin_flag == True and PIN_flag == True:
          sw_port_in = line.split(":")[1].strip()
@@ -150,14 +147,8 @@ def mininet_master(q):
    container = client.containers.get("mininet")
    print container
    ### exec_run has to be tty=True and privileged
-#   print container.exec_run("/opt/ctrlbnchmrk/mininet_topo_builder/mininet_master.py",tty=True, privileged=True)
-#   if TOPOLOGY == "linear":
-#      docker_command = "mn --controller=remote,ip=10.0.1.10 --topo=%s,%u --mac --switch=ovsk,protocols=OpenFlow13" % (TOPOLOGY, SWITCH_NUM)
-#   elif TOPOLOGY == "datacenter":
- 
    print ("%s" % docker_command)
-   ### exec_run has to be tty=True and privileged
-   print container.exec_run(docker_command, tty=True, privileged=True) 
+   container.exec_run(docker_command) 
 
 def main():
 
@@ -174,8 +165,7 @@ def main():
 
    for p in processes:
       p.start()
-
-
+   
    while True:
       msg = q.get()
       if msg == "TSHARK_DONE":

@@ -18,7 +18,7 @@ csvFileTshark = DATA_PATH +'TSHARK.csv'
 #csvFileDocker = DATA_PATH +'DOCKER.csv'
 FMT='%H:%M:%S.%f'
 
-data = pd.read_csv("/opt/ctrlbnchmrk/data/%s" % FILE, ";")
+data = pd.read_csv(FILE, " ")
 #docker_data = pd.read_csv(csvFileDocker,";")
 
 print data.head(2)
@@ -33,7 +33,7 @@ print data.head(2)
 #docker_cpu = docker_data['cpu'].values
 #docker_time = docker_data['time'].values
 
-switches = data['link_number'].values
+links = data['link_number'].values
 stamptime = data['stamptime'].values
 
 #docker_data = pd.read_csv(csvFile,";"
@@ -42,8 +42,8 @@ stamptime = data['stamptime'].values
 absStamptime = []
 Origin = datetime.strptime(stamptime[0][:15], FMT)
 tdelta = datetime.strptime(stamptime[len(stamptime)-1][:15], FMT) - Origin
-num_switches = len(stamptime)
-print ("Links: %u" % num_switches)
+num_links = len(stamptime)
+print ("Links: %u" % num_links)
 
 print ("Network Topology Time: %s" % tdelta)
 
@@ -59,16 +59,20 @@ for x in stamptime:
    else:
       absStamptime.append ([absTime])
 '''
-#absstamptime = datetime.strptime(stamptime[:15], FMT) - datetime.strptime(stamptime[0][:15], FMT)
-#plt.gca().yaxis.set_major_formatter(matplotlib.dates.DateFormatter("%H:%M:%S.%f"))
 #plt.figure(1)
 #plt.plot(pd.to_datetime(docker_time),docker_cpu)
 #plt.legend("docker cpu")
 #plt.figure(2)
-plt.legend("links discovery")
-plt.plot_date(pd.to_datetime(stamptime),switches)
+fig, ax = plt.subplots()
+ax.set_title("ODL - Links Discovery Time\n\
+   Topology: Linear\n\
+   Scale:2 Switches: 50 Hosts: 1")
+ax.set_ylabel("Links")
+ax.set_xlabel("Time")
+plt.plot_date(pd.to_datetime(stamptime),links)
 #plt.plot_date(switches,absStamptime)
-#plt.xticks([])
-#plt.figtext(.2, .8, "Time= %s" % tdelta)
-plt.figtext(.2, .75, "Links= %u" % num_switches)
+plt.xticks(rotation=45)
+plt.figtext(.2, .8, "Time= %s" % tdelta)
+plt.figtext(.2, .75, "Links= %u" % num_links)
+ax.autoscale_view()
 plt.show()

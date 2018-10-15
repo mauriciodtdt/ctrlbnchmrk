@@ -1,12 +1,9 @@
 """ 
-A simple datacenter topology script for Mininet.
-    [ s1 ]================================.
-      ,---'       |           |           |
-    [ s1r1 ]=.  [ s1r2 ]=.  [ s1r3 ]=.  [ s1r4 ]=.
-    [ h1r1 ]-|  [ h1r2 ]-|  [ h1r3 ]-|  [ h1r4 ]-|
-    [ h2r1 ]-|  [ h2r2 ]-|  [ h2r3 ]-|  [ h2r4 ]-|
-    [ h3r1 ]-|  [ h3r2 ]-|  [ h3r3 ]-|  [ h3r4 ]-|
-    [ h4r1 ]-'  [ h4r2 ]-'  [ h4r3 ]-'  [ h4r4 ]-'
+A simple tree topology script for Mininet.
+rootSwitch
+Level2Switches --> L2SWs
+Level3Switches --> L3SWs per L2SW
+Hosts
 """
  
 from mininet.topo import Topo

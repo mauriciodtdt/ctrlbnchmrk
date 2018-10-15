@@ -46,7 +46,7 @@ def build_network():
     for x in range( SCALE ):
        multiple_nets.append( Mininet(
           topo=multiple_topos[x],
-          controller=lambda name: RemoteController( name, ip='10.0.1.10'),
+          controller=lambda name: RemoteController( name, ip='10.0.1.10', port=6653),
           switch=OVSSwitch,
 #         protocols=OpenFlow13,
           autoSetMacs=True ))
@@ -64,7 +64,7 @@ def build_network():
              sw_file.write("Time after start network(s): %s\n" % str(datetime.datetime.now()))
  
     # print "Controller Connected"
-    CLI ( net )
+#    CLI ( net )
     # Drop the user in to a CLI so user can run commands.
     
     #while True:
