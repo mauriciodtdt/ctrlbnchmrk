@@ -3,7 +3,7 @@ version: '2'
 services:
   ctrl_odl:
     image: mauriciodtdt/odl:boron
-    cpuset: "11"
+#    cpuset: "11"
     privileged: true
     container_name: odl
     hostname: ctrl-node
@@ -18,7 +18,7 @@ services:
         ipv4_address: 10.0.1.10
 
   ctrl_onos:
-    cpuset: "11"
+#    cpuset: "11"
     image: mauriciodtdt/onos
     privileged: true
     container_name: onos
@@ -34,7 +34,7 @@ services:
         ipv4_address: 10.0.1.10
 
   ctrl_ryu:
-    cpuset: "11"
+#    cpuset: "11"
     image: osrg/ryu
     privileged: true
     container_name: ryu
@@ -51,7 +51,7 @@ services:
          ipv4_address: 10.0.1.10
 
   ctrl_floodlight:
-    cpuset: "11"
+#    cpuset: "11"
     image: mauriciodtdt/floodlight
     privileged: true
     container_name: floodlight
@@ -67,7 +67,7 @@ services:
          ipv4_address: 10.0.1.10
 
   ctrl_openmul:
-    cpuset: "11"
+#    cpuset: "11"
     image: kongseokhwan/open-mul
     privileged: true
     container_name: openmul
@@ -83,7 +83,7 @@ services:
          ipv4_address: 10.0.1.10
 
   ctrl_pox:
-    cpuset: "11"
+#    cpuset: "11"
     image: mauriciodtdt/pox
     privileged: true
     container_name: pox

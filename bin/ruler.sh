@@ -52,7 +52,7 @@ case $1 in
       cp /var/lib/docker/volumes/docker_shareVolume/_data/ctrlbnchmrk/data/*CBENCH* /opt/ctrlbnchmrk/data
       ;;
    "4")
-      ./NetworkTopologyTime.py
+      /opt/ctrlbnchmrk/ctrlbnchmrk/4_reactive_path_prov_time.py "${@:4}"
       ;;
    "5")
       ./NetworkTopologyTime.py

@@ -54,7 +54,7 @@ def build_network():
           autoSetMacs=True ))
 
     print ("Wait 10 secs before start controller")
-    time.sleep(5)    
+    time.sleep(10)    
 
     for net in multiple_nets:
        net.start()
