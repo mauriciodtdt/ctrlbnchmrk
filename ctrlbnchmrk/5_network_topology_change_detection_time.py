@@ -39,30 +39,24 @@ SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
 #tshark_logger_csv = caplog.get_logger("TSHARK-%s" % CONTROLLER,'csv')
 #my_logger_json = caplog.get_logger('TSHARK','json')
 
+dst_flow_array = []
+src_flow_array = []
   
 def tshark_disect():
-   dst_flow_array = []
-   src_flow_array = []
-   arp_timestamp = ""
    #add -O to dissect packet in detail
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Epoch Time|OFPT_FLOW_MOD|OFPFC_ADD|OFPXMT_OFB_IN_PORT|OFPXMT_OFB_ETH_(SRC|DST)|Value|ARP|Target IP address'" % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Epoch Time|OFPT_FLOW_MOD|OFPFC_ADD|OFPXMT_OFB_IN_PORT|OFPXMT_OFB_ETH_(SRC|DST)|Value'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    tshark=subprocess.Popen(cmdtshark, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
    begin_flag = False
    DST_flag = False
    SRC_flag = False
-   ARP_flag = True
-   
    while True:
       line = tshark.stdout.readline()
       if "Epoch Time" in line:
          begin_flag = False
-         DST_flag = False
-         SRC_flag = False
+         DST_FLAG = False
+         SRC_FLAG = False
          temp_timestamp = line.split()[2]
-      elif "Target IP address: 10.0.0.3" in line and ARP_flag == True:
-         arp_timestamp = temp_timestamp
-         ARP_flag = False
       elif "OFPFC_ADD" in line:
          begin_flag = True
          timestamp = temp_timestamp
@@ -75,12 +69,12 @@ def tshark_disect():
       elif "Value" in line and DST_flag == True:
          if DST_MAC in line:
             dst_flow_array.append(timestamp)
-#            print ("dst %s" % timestamp)
-#            print ("lenght dest: %u" % len(dst_flow_array))
+            print ("dst %s" % timestamp)
+            print ("lenght dest: %u" % len(dst_flow_array))
          if SRC_MAC in line:
             src_flow_array.append(timestamp)
-#            print ("src %s" % timestamp)
-#            print ("lenght src: %u" % len(src_flow_array))
+            print ("src %s" % timestamp)
+            print ("lenght src: %u" % len(src_flow_array))
       
       if (len(src_flow_array) + len(dst_flow_array)) == expected_num_flows:
          
@@ -90,17 +84,6 @@ def tshark_disect():
                flow_file.write("%s;%u;dst\n" % (item,dst_flow_array.index(item)))
             for item in src_flow_array:
                flow_file.write("%s;%u;src\n" % (item,src_flow_array.index(item)))
-
-         #1. controller get the arp request from source and broadcast it to all
-         #the switches
-         print ("initial arp request at: %s" % arp_timestamp)
-         #2. controller get the arp reply from destination and setup the path
-         #from destination to source
-         print ("last added flow to reach back the source at: %s" % src_flow_array[-1])      
-         #3. cotroller get the icmp request from source and setup the path from source 
-         #to destination
-         print ("last added flow to reach destination at: %s" % dst_flow_array[-1])
-       
          break
 
 def main():
