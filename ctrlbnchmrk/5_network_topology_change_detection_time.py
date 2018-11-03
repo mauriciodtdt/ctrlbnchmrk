@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#Usage ./4 source_mac dest_mac topology switches hosts (optional)
+#Usage ./5 topology switches hosts (optional)
 
 import os
 import logging
@@ -16,10 +16,10 @@ import config
 CBMHOME=os.environ.get("CBMHOME",None)
 CONTROLLER = os.environ.get("CONTROLLER", None)
 VINTERFACE = os.environ.get("VINTERFACE", None)
-SRC_MAC = sys.argv[1]
-DST_MAC = sys.argv[2]
-TOPOLOGY = sys.argv[3]
-
+#SRC_MAC = sys.argv[1]
+#DST_MAC = sys.argv[2]
+#TOPOLOGY = sys.argv[3]
+'''
 if TOPOLOGY == "linear":
    SWITCHES = int(sys.argv[4])
    HOSTS = int(sys.argv[5])
@@ -33,58 +33,54 @@ elif TOPOLOGY == "spineleaf":
    LEAF = int(sys.argv[5])
    HOSTS = int(sys.argv[6])
    expected_num_flows = (SPINE*2)
-
+'''
 OF_PORT=config.NET_TOPO_TIME['OF_PORT']
-SCAN_TIME=config.NET_TOPO_TIME['SCAN_TIME']
 #tshark_logger_csv = caplog.get_logger("TSHARK-%s" % CONTROLLER,'csv')
 #my_logger_json = caplog.get_logger('TSHARK','json')
 
-dst_flow_array = []
-src_flow_array = []
+prt_down_array = {}
+switch_dpid_array = []
   
 def tshark_disect():
    #add -O to dissect packet in detail
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Epoch Time|OFPT_FLOW_MOD|OFPFC_ADD|OFPXMT_OFB_IN_PORT|OFPXMT_OFB_ETH_(SRC|DST)|Value'" % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    tshark=subprocess.Popen(cmdtshark, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
    begin_flag = False
-   DST_flag = False
-   SRC_flag = False
+   lldp_begin_flag = False
+   lldp_after_failure = False
    while True:
       line = tshark.stdout.readline()
       if "Epoch Time" in line:
          begin_flag = False
-         DST_FLAG = False
-         SRC_FLAG = False
+         lldp_begin_flag = False
          temp_timestamp = line.split()[2]
-      elif "OFPFC_ADD" in line:
+      elif "OFPT_PORT_STATUS" in line:
          begin_flag = True
-         timestamp = temp_timestamp
-      elif "OFPXMT_OFB_ETH_DST" in line:
-         DST_flag = True
-         SRC_flag = False
-      elif "OFPXMT_OFB_ETH_SRC" in line:
-         SRC_flag = True
-         DST_flag = False
-      elif "Value" in line and DST_flag == True:
-         if DST_MAC in line:
-            dst_flow_array.append(timestamp)
-            print ("dst %s" % timestamp)
-            print ("lenght dest: %u" % len(dst_flow_array))
-         if SRC_MAC in line:
-            src_flow_array.append(timestamp)
-            print ("src %s" % timestamp)
-            print ("lenght src: %u" % len(src_flow_array))
-      
-      if (len(src_flow_array) + len(dst_flow_array)) == expected_num_flows:
-         
-         with open ("/opt/ctrlbnchmrk/data/%s_flows.csv" % CONTROLLER, mode='w') as flow_file:
-            flow_file.write("timestamp;flow_number;flow_dir\n")
-            for item in dst_flow_array:
-               flow_file.write("%s;%u;dst\n" % (item,dst_flow_array.index(item)))
-            for item in src_flow_array:
-               flow_file.write("%s;%u;src\n" % (item,src_flow_array.index(item)))
-         break
+      elif "OFPT_PACKET_OUT" in line:
+         lldp_begin_flag = True
+      elif "Name" in line and begin_flag == True:
+         switch_int = line.split()[1]
+         print (switch_int) 
+      elif "OFPPC_PORT_DOWN: True" in line and begin_flag == True:
+         print ("Port Down")
+         prt_down_timestamp = temp_timestamp
+         print (prt_down_timestamp)
+         prt_down_array[switch_int] = (prt_down_timestamp)
+         lldp_after_failure = True  
+      elif "Chassis Subtype" in line and lldp_after_failure == True and lldp_begin_flag == True:
+         switch_dpid = line.split(":")[2].strip()
+         switch_dpid_array.append(switch_dpid)
+         print (switch_dpid)
+         if '0000000000000002' in switch_dpid_array  and '0000000000000001' in switch_dpid_array:
+            print ("switch_dpid_array")
+            print (switch_dpid_array)
+            print (temp_timestamp)
+            with open ("/opt/ctrlbnchmrk/data/5_%s_change_detection.csv" % CONTROLLER, mode='w') as prt_failure_file:
+               prt_failure_file.write("switch_int;timestamp\n")
+               for item in prt_down_array:
+                  prt_failure_file.write("%s;%s\n" % (prt_down_array[item],item))
+            break
 
 def main():
 

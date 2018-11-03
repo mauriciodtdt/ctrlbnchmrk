@@ -55,7 +55,7 @@ case $1 in
       /opt/ctrlbnchmrk/ctrlbnchmrk/4_reactive_path_prov_time.py "${@:4}"
       ;;
    "5")
-      ./NetworkTopologyTime.py
+      /opt/ctrlbnchmrk/ctrlbnchmrk/5_network_topology_change_detection_time.py "${@:4}"
       ;;
    "6")
       ./NetworkTopologyTime.py
