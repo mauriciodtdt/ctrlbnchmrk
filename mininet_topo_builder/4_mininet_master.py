@@ -58,7 +58,7 @@ def build_network():
 
     for net in multiple_nets:
        net.start()
-#       CLI ( net )
+       CLI ( net )
  
 if __name__ == '__main__':
     # This runs if this file is executed directly

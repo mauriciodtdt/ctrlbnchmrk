@@ -48,7 +48,7 @@ def build_network():
     for x in range( SCALE ):
        multiple_nets.append( Mininet(
           topo=multiple_topos[x],
-          controller=lambda name: RemoteController( name, ip='10.0.1.10', port=6653),
+          controller=lambda name: RemoteController( name, ip='10.0.1.10', port=6633),
           switch=OVSSwitch,
 #         protocols=OpenFlow13,
           autoSetMacs=True ))

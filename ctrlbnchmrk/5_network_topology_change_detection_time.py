@@ -69,13 +69,17 @@ def tshark_disect():
          prt_down_array[switch_int] = (prt_down_timestamp)
          lldp_after_failure = True  
       elif "Chassis Subtype" in line and lldp_after_failure == True and lldp_begin_flag == True:
-         switch_dpid = line.split(":")[2].strip()
+#         switch_dpid = line.split(":")[2].strip()
+         switch_dpid = line.split()[6].strip()
          switch_dpid_array.append(switch_dpid)
-         print (switch_dpid)
-         if '0000000000000002' in switch_dpid_array  and '0000000000000001' in switch_dpid_array:
-            print ("switch_dpid_array")
-            print (switch_dpid_array)
-            print (temp_timestamp)
+#         print (switch_dpid)
+#         if '0000000000000002' in switch_dpid_array  and '0000000000000001' in switch_dpid_array:
+         if '00:00:00:00:00:02' in switch_dpid_array  and '00:00:00:00:00:01' in switch_dpid_array:
+#            print ("switch_dpid_array")
+#            print (switch_dpid_array)
+            print ("lldp detected: %s" % temp_timestamp)
+            print ("Delta s2-eth2: %f" % (float(temp_timestamp) - float(prt_down_array["s2-eth2"])))
+            print ("Delta s1-eth2: %f" % (float(temp_timestamp) - float(prt_down_array["s1-eth2"])))
             with open ("/opt/ctrlbnchmrk/data/5_%s_change_detection.csv" % CONTROLLER, mode='w') as prt_failure_file:
                prt_failure_file.write("switch_int;timestamp\n")
                for item in prt_down_array:

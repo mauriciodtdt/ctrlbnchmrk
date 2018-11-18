@@ -68,14 +68,14 @@ services:
 
   ctrl_openmul:
 #    cpuset: "11"
-    image: kongseokhwan/open-mul
+    image: mauriciodtdt/openmul:v2
     privileged: true
     container_name: openmul
     hostname: ctrl-node
     ports:
       - "8181:8181"
     tty: true
-    command: bash -c "/bin/bash"
+#    command: bash -c "/bin/bash"
     volumes:
       - shareVolume:/opt/  
     networks:

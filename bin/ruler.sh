@@ -4,13 +4,12 @@
 #         -T Run Performance Test 
 #         -k Kill Docker Containers
 #Performance Tests Options:
-#1. Network Topology Discovery Time
-#2. Asyinchronous Message Processing Time - Cbench Latency
-#3. Asyinchronous Message Processing Rate - Cbench Throughput
+#1. Asyinchronous Message Processing Time - Cbench Latency
+#2. Asyinchronous Message Processing Rate - Cbench Throughput
+#3. Network Topology Discovery Time
 #4. Reactive Path Provisioning Time
 #5. Network Topology Change Detection Time
 #6. Network Discovery Size
-#7. Network Re-Provisioning Time
 
 #####################################################
 #Setting env variables CBHOME, CONTROLLER, VINTERFACE
@@ -40,14 +39,14 @@ case $1 in
 -T)
    echo "Controller: $CONTROLLER"
    case $3 in
-   "1")
+   "3")
       /opt/ctrlbnchmrk/ctrlbnchmrk/network_topology_discovery_13.py "${@:4}"
       ;;
-   "2")
+   "1")
       docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py $CONTROLLER -l   
       cp /var/lib/docker/volumes/docker_shareVolume/_data/ctrlbnchmrk/data/*CBENCH* /opt/ctrlbnchmrk/data
       ;;
-   "3")
+   "2")
       docker exec -it cbench python /opt/ctrlbnchmrk/ctrlbnchmrk/cbench_perf_test.py $CONTROLLER -t
       cp /var/lib/docker/volumes/docker_shareVolume/_data/ctrlbnchmrk/data/*CBENCH* /opt/ctrlbnchmrk/data
       ;;

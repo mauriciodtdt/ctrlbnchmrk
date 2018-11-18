@@ -24,6 +24,7 @@ if TOPOLOGY == "linear":
    SWITCHES = int(sys.argv[4])
    HOSTS = int(sys.argv[5])
    expected_num_flows = (SWITCHES*2)
+   print (expected_num_flows)
 elif TOPOLOGY == "datacenter":
    RACKS = int(sys.argv[4])
    HOSTS = int(sys.argv[5])
@@ -60,7 +61,7 @@ def tshark_disect():
          DST_flag = False
          SRC_flag = False
          temp_timestamp = line.split()[2]
-      elif "Target IP address: 10.0.0.3" in line and ARP_flag == True:
+      elif "Target IP address: 10.0.0.100" in line and ARP_flag == True:
          arp_timestamp = temp_timestamp
          ARP_flag = False
       elif "OFPFC_ADD" in line:
@@ -76,12 +77,11 @@ def tshark_disect():
          if DST_MAC in line:
             dst_flow_array.append(timestamp)
 #            print ("dst %s" % timestamp)
-#            print ("lenght dest: %u" % len(dst_flow_array))
+            print ("lenght dest: %u" % len(dst_flow_array))
          if SRC_MAC in line:
             src_flow_array.append(timestamp)
 #            print ("src %s" % timestamp)
-#            print ("lenght src: %u" % len(src_flow_array))
-      
+            print ("lenght src: %u" % len(src_flow_array))
       if (len(src_flow_array) + len(dst_flow_array)) == expected_num_flows:
          
          with open ("/opt/ctrlbnchmrk/data/%s_flows.csv" % CONTROLLER, mode='w') as flow_file:
@@ -102,7 +102,6 @@ def tshark_disect():
          print ("last added flow to reach destination at: %s" % dst_flow_array[-1])
        
          break
-
 def main():
 
    tshark_disect()
