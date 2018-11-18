@@ -68,7 +68,7 @@ services:
 
   ctrl_openmul:
 #    cpuset: "11"
-    image: mauriciodtdt/openmul:v2
+    image: kongseokhwan/open-mul
     privileged: true
     container_name: openmul
     hostname: ctrl-node

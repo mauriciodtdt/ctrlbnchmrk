@@ -10,6 +10,7 @@ from mininet.node import RemoteController, OVSSwitch
 from topologies import datacenter
 from topologies import spineleaf
 from topologies import linear
+from topologies import switches
 import multiprocessing as mp
 import time
 import datetime
@@ -31,6 +32,10 @@ def build_network():
           HOST_NUM = int(sys.argv[5])
           multiple_topos.append(linear.LinearBasicTopo(dpid, SWITCH_NUM,HOST_NUM))
           dpid = multiple_topos[x].dpid_count
+       elif TOPOLOGY == "switches":
+          SWITCH_NUM = int(sys.argv[4])
+          multiple_topos.append(switches.SwitchesBasicTopo(dpid, SWITCH_NUM))
+          dpid = multiple_topos[x].dpid_count
        elif TOPOLOGY == "datacenter":
           RACK_NUM = int(sys.argv[4])
           HOST_NUM = int(sys.argv[5])
@@ -48,7 +53,7 @@ def build_network():
     for x in range( SCALE ):
        multiple_nets.append( Mininet(
           topo=multiple_topos[x],
-          controller=lambda name: RemoteController( name, ip='10.0.1.10', port=6653),
+          controller=lambda name: RemoteController( name, ip='10.0.1.10', port=6633),
           switch=OVSSwitch,
 #         protocols=OpenFlow13,
           autoSetMacs=True ))
