@@ -2,6 +2,7 @@
 
 #usage: mininet_master.py topology scale dpid_count switch host 
 
+from functools import partial
 from mininet.cli import CLI
 from mininet.log import setLogLevel
 from mininet.net import Mininet
@@ -10,6 +11,7 @@ from mininet.node import RemoteController, OVSSwitch
 from topologies import datacenter
 from topologies import spineleaf
 from topologies import linear
+from topologies import switches
 import multiprocessing as mp
 import time
 import datetime
@@ -17,6 +19,7 @@ import sys
 
 
 def build_network():
+    OVSSwitch13 = partial(OVSSwitch, protocols='OpenFlow13')
     TOPOLOGY = sys.argv[1]
     SCALE = int(sys.argv[2])
     DPID_COUNT = int(sys.argv[3])
@@ -30,6 +33,10 @@ def build_network():
           SWITCH_NUM = int(sys.argv[4])
           HOST_NUM = int(sys.argv[5])
           multiple_topos.append(linear.LinearBasicTopo(dpid, SWITCH_NUM,HOST_NUM))
+          dpid = multiple_topos[x].dpid_count
+       elif TOPOLOGY == "switches":
+          SWITCH_NUM = int(sys.argv[4])
+          multiple_topos.append(switches.SwitchesBasicTopo(dpid, SWITCH_NUM))
           dpid = multiple_topos[x].dpid_count
        elif TOPOLOGY == "datacenter":
           RACK_NUM = int(sys.argv[4])
@@ -50,15 +57,14 @@ def build_network():
           topo=multiple_topos[x],
           controller=lambda name: RemoteController( name, ip='10.0.1.10', port=6633),
           switch=OVSSwitch,
-#         protocols=OpenFlow13,
+#          switch=OVSSwitch13, #Use it to force OF13 in some systems
           autoSetMacs=True ))
 
-    print ("Wait 10 secs before start controller")
-    time.sleep(5)    
+    raw_input("Press enter to start controller") 
 
     for net in multiple_nets:
        net.start()
-#       CLI ( net )
+       CLI ( net )
  
 if __name__ == '__main__':
     # This runs if this file is executed directly

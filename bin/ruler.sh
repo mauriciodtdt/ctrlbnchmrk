@@ -32,7 +32,8 @@ case $1 in
 -D)
    echo "Deploying the environment"
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml up --no-start #&>/dev/null &
-   docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml start mininet cbench
+   docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml start mininet 
+#   docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml start cbench
    docker-compose -f /opt/ctrlbnchmrk/docker/docker-compose.yml start ctrl_$2
    ;;
 #Performance Tests (1 to 7) check wiki

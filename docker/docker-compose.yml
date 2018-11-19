@@ -9,6 +9,7 @@ services:
     hostname: ctrl-node
     ports:
       - "8181:8181"
+      - "6633:6633"
     tty: true
     command: bash -c "/bin/bash"
     volumes:
@@ -41,9 +42,11 @@ services:
     hostname: ctrl-node
     ports:
       - "8080:8080"
+      - "6633:6633"
     tty: true
-    command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch_13.py --observe-links"
-#    command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch.py"
+#    command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/rest_topology.py ryu.app.ofctl_rest ryu/ryu/app/simple_switch_13.py --observe-links"
+    command: bash -c "ryu run ryu/ryu/app/simple_switch_13.py ryu/ryu/app/rest_topology.py ryu.app.ofctl_rest --observe-links" #get links test6
+#    command: bash -c "ryu run ryu/ryu/app/gui_topology/gui_topology.py ryu/ryu/app/simple_switch.py" #OF1.0 Test1and2
     volumes:
       - shareVolume:/opt/  
     networks:
