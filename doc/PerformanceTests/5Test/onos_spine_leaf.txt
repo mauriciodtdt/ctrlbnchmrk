@@ -1,0 +1,144 @@
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564726.158093000
+sL9-eth2
+Port Down
+1542564726.158223000
+lldp detected: 1542564727.340678000
+Delta s2-eth2: 1.182455
+Delta s1-eth2: 1.182585
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564748.865402000
+sL9-eth2
+Port Down
+1542564748.865527000
+lldp detected: 1542564749.037797000
+Delta s2-eth2: 0.172270
+Delta s1-eth2: 0.172395
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564766.337548000
+sL9-eth2
+Port Down
+1542564766.337689000
+lldp detected: 1542564767.640392000
+Delta s2-eth2: 1.302703
+Delta s1-eth2: 1.302844
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564784.560809000
+sL9-eth2
+Port Down
+1542564784.560957000
+lldp detected: 1542564786.236576000
+Delta s2-eth2: 1.675619
+Delta s1-eth2: 1.675767
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564800.970272000
+sL9-eth2
+Port Down
+1542564800.970402000
+lldp detected: 1542564801.746311000
+Delta s2-eth2: 0.775909
+Delta s1-eth2: 0.776039
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564813.925364000
+sL9-eth2
+Port Down
+1542564813.925493000
+lldp detected: 1542564814.136132000
+Delta s2-eth2: 0.210639
+Delta s1-eth2: 0.210768
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564827.312651000
+sL9-eth2
+Port Down
+1542564827.312798000
+lldp detected: 1542564829.638124000
+Delta s2-eth2: 2.325326
+Delta s1-eth2: 2.325473
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564844.561158000
+sL9-eth2
+Port Down
+1542564844.561289000
+lldp detected: 1542564845.139122000
+Delta s2-eth2: 0.577833
+Delta s1-eth2: 0.577964
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564857.320445000
+sL9-eth2
+Port Down
+1542564857.320575000
+lldp detected: 1542564857.539548000
+Delta s2-eth2: 0.218973
+Delta s1-eth2: 0.219103
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564867.604271000
+sL9-eth2
+Port Down
+1542564867.604455000
+lldp detected: 1542564869.936875000
+Delta s2-eth2: 2.332420
+Delta s1-eth2: 2.332604
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564885.311194000
+sL9-eth2
+Port Down
+1542564885.311340000
+lldp detected: 1542564885.435441000
+Delta s2-eth2: 0.124101
+Delta s1-eth2: 0.124247
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T onos 5 spineleaf 8 16 1
+Controller: onos
+tshark -q -i br-6813c0fe05c3 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542564893.628811000
+sL9-eth2
+Port Down
+1542564893.628956000
+lldp detected: 1542564894.738286000
+Delta s2-eth2: 1.109330
+Delta s1-eth2: 1.109475

@@ -1,0 +1,145 @@
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565732.158379000
+sL9-eth2
+Port Down
+1542565732.158517000
+lldp detected: 1542565744.471913000
+Delta s2-eth2: 12.313396
+Delta s1-eth2: 12.313534
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565791.391063000
+sL9-eth2
+Port Down
+1542565791.391203000
+lldp detected: 1542565804.490785000
+Delta s2-eth2: 13.099582
+Delta s1-eth2: 13.099722
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565833.343026000
+sL9-eth2
+Port Down
+1542565833.343161000
+lldp detected: 1542565834.497162000
+Delta s2-eth2: 1.154001
+Delta s1-eth2: 1.154136
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565852.429042000
+sL9-eth2
+Port Down
+1542565852.429239000
+lldp detected: 1542565864.638019000
+Delta s2-eth2: 12.208780
+Delta s1-eth2: 12.208977
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565885.990631000
+sL9-eth2
+Port Down
+1542565885.990772000
+lldp detected: 1542565894.649413000
+Delta s2-eth2: 8.658641
+Delta s1-eth2: 8.658782
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565915.450150000
+sL9-eth2
+Port Down
+1542565915.450302000
+lldp detected: 1542565924.661439000
+Delta s2-eth2: 9.211137
+Delta s1-eth2: 9.211289
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565941.886386000
+sL9-eth2
+Port Down
+1542565941.886526000
+lldp detected: 1542565954.668563000
+Delta s2-eth2: 12.782037
+Delta s1-eth2: 12.782177
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542565983.026968000
+sL9-eth2
+Port Down
+1542565983.027111000
+lldp detected: 1542565984.676002000
+Delta s2-eth2: 1.648891
+Delta s1-eth2: 1.649034
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542566004.829978000
+sL9-eth2
+Port Down
+1542566004.830117000
+lldp detected: 1542566014.783820000
+Delta s2-eth2: 9.953703
+Delta s1-eth2: 9.953842
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542566031.434919000
+sL9-eth2
+Port Down
+1542566031.435066000
+lldp detected: 1542566044.790124000
+Delta s2-eth2: 13.355058
+Delta s1-eth2: 13.355205
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542566069.814744000
+sL9-eth2
+Port Down
+1542566069.814875000
+lldp detected: 1542566074.800923000
+Delta s2-eth2: 4.986048
+Delta s1-eth2: 4.986179
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ sudo bin/ruler.sh -T floodlight 5 spineleaf 8 16 1
+Controller: floodlight
+tshark -q -i br-30773a576f91 -d tcp.port==6633,openflow -V | egrep 'Epoch Time|OFPT_PORT_STATUS|OFPT_PACKET_OUT|Name|OFPPC_PORT_DOWN|Chassis Subtype'
+s1-eth1
+Port Down
+1542566096.958038000
+sL9-eth2
+Port Down
+1542566096.958182000
+lldp detected: 1542566104.874280000
+Delta s2-eth2: 7.916098
+Delta s1-eth2: 7.916242
+mauricio@sdnctrls-lab:/opt/ctrlbnchmrk$ 
