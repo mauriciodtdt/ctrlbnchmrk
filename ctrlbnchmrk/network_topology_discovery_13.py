@@ -121,7 +121,7 @@ def tshark_disect(q):
          
 
          with open ("/opt/ctrlbnchmrk/data/%s_switches.csv" % CONTROLLER, mode='w') as sw_file:
-            sw_file.write("tcpport;dpid\n")
+            sw_file.write("tcpport;dpid;stamptime\n")
             for item in sw_array:
                sw_file.write("%s;%s\n" % (item,sw_array[item]))
 
