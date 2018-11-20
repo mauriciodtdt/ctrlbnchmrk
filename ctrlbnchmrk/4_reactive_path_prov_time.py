@@ -28,7 +28,7 @@ if TOPOLOGY == "linear":
 elif TOPOLOGY == "datacenter":
    RACKS = int(sys.argv[4])
    HOSTS = int(sys.argv[5])
-   expected_num_flows = (RACKS*2)
+   expected_num_flows = 6
 elif TOPOLOGY == "spineleaf":
    SPINE = int(sys.argv[4])
    LEAF = int(sys.argv[5])
@@ -46,10 +46,10 @@ def tshark_disect():
    src_flow_array = []
    arp_timestamp = ""
    #add -O to dissect packet in detail
-   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Epoch Time|OFPT_FLOW_MOD|OFPFC_ADD|OFPXMT_OFB_IN_PORT|OFPXMT_OFB_ETH_(SRC|DST)|Value|ARP|Target IP address'" % (VINTERFACE, OF_PORT)
+   cmdtshark = "tshark -q -i %s -d tcp.port==%s,openflow -V | egrep 'Epoch Time|OFPT_FLOW_MOD|OFPFC_ADD|OFPXMT_OFB_ETH_(SRC|DST)|Value|ARP|Target IP address'" % (VINTERFACE, OF_PORT)
    print cmdtshark
    tshark=subprocess.Popen(cmdtshark, shell=True, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-   begin_flag = False
+   add_flag = False
    DST_flag = False
    SRC_flag = False
    ARP_flag = True
@@ -57,17 +57,17 @@ def tshark_disect():
    while True:
       line = tshark.stdout.readline()
       if "Epoch Time" in line:
-         begin_flag = False
+         add_flag = False
          DST_flag = False
          SRC_flag = False
          temp_timestamp = line.split()[2]
-      elif "Target IP address: 10.0.0.100" in line and ARP_flag == True:
+      elif "Target IP address: 10.0.0.8" in line and ARP_flag == True:
          arp_timestamp = temp_timestamp
          ARP_flag = False
       elif "OFPFC_ADD" in line:
-         begin_flag = True
+         add_flag = True
          timestamp = temp_timestamp
-      elif "OFPXMT_OFB_ETH_DST" in line:
+      elif "OFPXMT_OFB_ETH_DST" in line and add_flag == True:
          DST_flag = True
          SRC_flag = False
       elif "OFPXMT_OFB_ETH_SRC" in line:
@@ -82,6 +82,7 @@ def tshark_disect():
             src_flow_array.append(timestamp)
 #            print ("src %s" % timestamp)
             print ("lenght src: %u" % len(src_flow_array))
+"""
       if (len(src_flow_array) + len(dst_flow_array)) == expected_num_flows:
          
          with open ("/opt/ctrlbnchmrk/data/%s_flows.csv" % CONTROLLER, mode='w') as flow_file:
@@ -102,6 +103,7 @@ def tshark_disect():
          print ("last added flow to reach destination at: %s" % dst_flow_array[-1])
        
          break
+"""
 def main():
 
    tshark_disect()
