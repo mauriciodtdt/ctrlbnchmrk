@@ -60,11 +60,11 @@ def build_network():
 #          switch=OVSSwitch13, #Use it to force OF13 in some systems
           autoSetMacs=True ))
 
-    raw_input("Press enter to start controller") 
+#    raw_input("Press enter to start controller") 
 
     for net in multiple_nets:
        net.start()
-       CLI ( net )
+#       CLI ( net )
  
 if __name__ == '__main__':
     # This runs if this file is executed directly
