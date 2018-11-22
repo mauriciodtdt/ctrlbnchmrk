@@ -28,7 +28,7 @@ if TOPOLOGY == "linear":
 elif TOPOLOGY == "datacenter":
    RACKS = int(sys.argv[4])
    HOSTS = int(sys.argv[5])
-   expected_num_flows = 6
+   expected_num_flows = 30
 elif TOPOLOGY == "spineleaf":
    SPINE = int(sys.argv[4])
    LEAF = int(sys.argv[5])
@@ -61,7 +61,7 @@ def tshark_disect():
          DST_flag = False
          SRC_flag = False
          temp_timestamp = line.split()[2]
-      elif "Target IP address: 10.0.0.8" in line and ARP_flag == True:
+      elif "Target IP address: 10.0.0.7" in line and ARP_flag == True:
          arp_timestamp = temp_timestamp
          ARP_flag = False
       elif "OFPFC_ADD" in line:
@@ -77,13 +77,13 @@ def tshark_disect():
          if DST_MAC in line:
             dst_flow_array.append(timestamp)
 #            print ("dst %s" % timestamp)
-            print ("lenght dest: %u" % len(dst_flow_array))
+#            print ("lenght dest: %u" % len(dst_flow_array))
          if SRC_MAC in line:
             src_flow_array.append(timestamp)
 #            print ("src %s" % timestamp)
-            print ("lenght src: %u" % len(src_flow_array))
-"""
-      if (len(src_flow_array) + len(dst_flow_array)) == expected_num_flows:
+#            print ("lenght src: %u" % len(src_flow_array))
+
+      if (len(src_flow_array) == 6 and len(dst_flow_array) == 6):
          
          with open ("/opt/ctrlbnchmrk/data/%s_flows.csv" % CONTROLLER, mode='w') as flow_file:
             flow_file.write("timestamp;flow_number;flow_dir\n")
@@ -98,12 +98,14 @@ def tshark_disect():
          #2. controller get the arp reply from destination and setup the path
          #from destination to source
          print ("last added flow to reach back the source at: %s" % src_flow_array[-1])      
+         print ("delta to reach the source: %f" % (float(src_flow_array[-1]) - float(arp_timestamp)))
          #3. cotroller get the icmp request from source and setup the path from source 
          #to destination
          print ("last added flow to reach destination at: %s" % dst_flow_array[-1])
-       
+         print ("delta to reach the source: %f" % (float(dst_flow_array[-1]) - float(arp_timestamp)))
+             
          break
-"""
+
 def main():
 
    tshark_disect()
