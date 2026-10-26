@@ -111,4 +111,4 @@ Python · Docker / docker-compose · Mininet · Open vSwitch · OpenFlow 1.0/1.3
 ## Author
 
 **Alvaro Mauricio Diaz Tello**, MSc in Internetworking, University of Technology Sydney
-Supervisor: Mehran Abolhasan
+Supervisor: Prof. Mehran Abolhasan
