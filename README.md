@@ -49,6 +49,23 @@ The paper's reference testbed was a Dell R740 (Xeon E5-2420 v2, 6 cores / 12 thr
 | 5 | Network Topology Change Detection Time | Performance | Time from a simulated link failure (`PORT_STATUS`) until re-discovery |
 | 6 | Network Discovery Size | Scalability | Largest linear topology that stays stable for 5 minutes (+100 switches per step) |
 
+## Results
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="doc/results/cbench_dark.png">
+  <img src="doc/results/cbench_light.png" alt="Cbench latency and throughput mode results for six SDN controllers">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="doc/results/discovery_time_dark.png">
+  <img src="doc/results/discovery_time_light.png" alt="Network topology discovery time for Ryu, ODL and ONOS across five topologies">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="doc/results/change_detection_and_size_dark.png">
+  <img src="doc/results/change_detection_and_size_light.png" alt="Topology change detection time and network discovery size per controller">
+</picture>
+
 ## Key findings
 
 - **OpenMUL** (C) had the highest raw throughput and latency in Cbench, at about 80K flows/s in latency mode (~12.5 µs per `PACKET_IN`).
@@ -57,7 +74,7 @@ The paper's reference testbed was a Dell R740 (Xeon E5-2420 v2, 6 cores / 12 thr
 - **Floodlight** does not set the OpenFlow 1.3 `PACKET_IN` *reason* field correctly (`OFPR_NO_MATCH` instead of `OFPR_ACTION` for LLDP). This slowed its topology change detection.
 - **OpenDaylight's** L2Switch forwards traffic without installing flow paths. This slowed discovery and broke forwarding between isolated networks.
 
-See the paper for the full results and discussion.
+See the paper for the full results and discussion. Raw data is in `doc/PerformanceTests/`, and `plot/readme_figures.py` regenerates the charts above.
 
 ## Repository layout
 
@@ -73,8 +90,9 @@ ctrlbnchmrk/                  Benchmark implementations
   lib/                          tshark capture logging, Docker stats, Mininet helpers
 mininet_topo_builder/         Mininet launcher and topology definitions
   topologies/                   linear, tree, spineleaf, datacenter, switches
-plot/                         Plotting scripts for the paper figures
+plot/                         Plotting scripts for the paper and README figures
 doc/PerformanceTests/         Raw CSV results from the published experiments
+doc/results/                  Result charts used in this README
 tests/                        Reference OpenFlow packet captures (ODL, Ryu; OF 1.0/1.3)
 ```
 
@@ -111,4 +129,4 @@ Python · Docker / docker-compose · Mininet · Open vSwitch · OpenFlow 1.0/1.3
 ## Author
 
 **Alvaro Mauricio Diaz Tello**, MSc in Internetworking, University of Technology Sydney
-Supervisor: Prof. Mehran Abolhasan
+Supervisor: Prof. Mehran Abolhasan (UTS)
